@@ -13,7 +13,6 @@ namespace RPAUserAdminOJT.Controllers
     public class Program
     {
 
-
         public static void Main(string[] args)
         {
             Models.GlobalVar.filePath = @"C:\Users\juan.sepulveda.m\Downloads\Respaldo_Download\usersAdmir.csv";
@@ -40,7 +39,6 @@ namespace RPAUserAdminOJT.Controllers
             }
 
         }
-
 
         public static void Create()
         {
@@ -122,7 +120,6 @@ namespace RPAUserAdminOJT.Controllers
             MessageBox.Show("Datos Creados: " + Models.GlobalVar.countYESProcess.ToString() + "\n" + "Datos No Creados: " + Models.GlobalVar.countNOProcess.ToString());
         }
 
-
         public static void Deleted()
         {
             int qtyFile = 0;
@@ -188,7 +185,6 @@ namespace RPAUserAdminOJT.Controllers
 
             MessageBox.Show("Datos Eliminados: " + Models.GlobalVar.countYESProcess.ToString() + "\n" + "Datos No Eliminados: " + Models.GlobalVar.countNOProcess.ToString());
         }
-
 
     }
 }
