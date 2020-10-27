@@ -15,6 +15,25 @@ namespace RPAUserAdminOJT.Controllers
 
         public static void Main(string[] args)
         {
+
+            Initialize();
+
+        }
+
+
+        public static void Initialize()
+        {
+            string ceco = string.Empty;
+            string cod_pcrc = string.Empty;
+            string documento = string.Empty;
+            string id_dp_cargos = string.Empty;
+            string id_dp_estados = string.Empty;
+            string nombre_cargo = string.Empty;
+            string nombre_ceco = string.Empty;
+            string nombre_completo = string.Empty;
+            string nombre_pcrc = string.Empty;
+            string tipo_estado = string.Empty;
+
             Models.GlobalVar.filePath = @"C:\Users\juan.sepulveda.m\Downloads\Respaldo_Download\usersAdmir.csv";
 
             using (PrincipalContext principalContext = new PrincipalContext(ContextType.Domain, Models.GlobalVar.Domain))
@@ -27,7 +46,59 @@ namespace RPAUserAdminOJT.Controllers
                     //Deleted();
 
                     string NToken = Function.ConsultAPI.getToken();
-                    Function.ConsultAPI.getExpedientes(NToken);
+                    IList<Models.ModelExpedientes> exped = Function.ConsultAPI.getExpedientes(NToken);
+
+                    for (int i = 0; i < exped.Count; i++)
+                    {
+
+                        try
+                        {
+                            ceco = string.Empty;
+                            cod_pcrc = string.Empty;
+                            documento = string.Empty;
+                            id_dp_cargos = string.Empty;
+                            id_dp_estados = string.Empty;
+                            nombre_cargo = string.Empty;
+                            nombre_ceco = string.Empty;
+                            nombre_completo = string.Empty;
+                            nombre_pcrc = string.Empty;
+                            tipo_estado = string.Empty;
+
+                            ceco = exped[i].ceco.ToString();
+                            cod_pcrc = exped[i].cod_pcrc.ToString();
+                            documento = exped[i].documento.ToString();
+                            id_dp_cargos = exped[i].id_dp_cargos.ToString();
+                            id_dp_estados = exped[i].id_dp_estados.ToString();
+                            nombre_cargo = exped[i].nombre_cargo.ToString();
+                            nombre_ceco = exped[i].nombre_ceco.ToString();
+                            nombre_completo = exped[i].nombre_completo.ToString();
+                            nombre_pcrc = exped[i].nombre_pcrc.ToString();
+                            tipo_estado = exped[i].tipo_estado.ToString();
+
+                            if (id_dp_estados == "309")
+                            {
+                                Models.ModelExpedientes.candidatForma.Add(ceco + ";" + cod_pcrc + ";" + documento + ";" + id_dp_cargos + ";" + id_dp_estados + ";" + nombre_cargo + ";" + nombre_ceco + ";" + nombre_completo + ";" + nombre_pcrc + ";" + tipo_estado);
+                            }
+                            else if (id_dp_estados == "301")
+                            {
+                                Models.ModelExpedientes.candidatOJT.Add(ceco + ";" + cod_pcrc + ";" + documento + ";" + id_dp_cargos + ";" + id_dp_estados + ";" + nombre_cargo + ";" + nombre_ceco + ";" + nombre_completo + ";" + nombre_pcrc + ";" + tipo_estado);
+                            }
+                            else if (id_dp_estados == "317")
+                            {
+                                Models.ModelExpedientes.candidatRechz.Add(ceco + ";" + cod_pcrc + ";" + documento + ";" + id_dp_cargos + ";" + id_dp_estados + ";" + nombre_cargo + ";" + nombre_ceco + ";" + nombre_completo + ";" + nombre_pcrc + ";" + tipo_estado);
+                            }
+
+                        }
+                        catch
+                        {
+
+                        }
+
+                    }
+
+                    Models.ModelExpedientes.candidatForma.ToString();
+                    Models.ModelExpedientes.candidatOJT.ToString();
+                    Models.ModelExpedientes.candidatRechz.ToString();
 
                 }
                 else
@@ -37,7 +108,6 @@ namespace RPAUserAdminOJT.Controllers
 
                 principalContext.Dispose();
             }
-
         }
 
         public static void Create()
