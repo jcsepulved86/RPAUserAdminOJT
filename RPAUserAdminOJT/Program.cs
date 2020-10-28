@@ -42,8 +42,6 @@ namespace RPAUserAdminOJT.Controllers
 
                 if (isValid != false)
                 {
-                    //Create();
-                    //Deleted();
 
                     string NToken = Function.ConsultAPI.getToken();
                     IList<Models.ModelExpedientes> exped = Function.ConsultAPI.getExpedientes(NToken);
@@ -96,9 +94,13 @@ namespace RPAUserAdminOJT.Controllers
 
                     }
 
-                    Models.ModelExpedientes.candidatForma.ToString();
-                    Models.ModelExpedientes.candidatOJT.ToString();
-                    Models.ModelExpedientes.candidatRechz.ToString();
+                    //Models.ModelExpedientes.candidatForma.ToString();
+                    //Models.ModelExpedientes.candidatOJT.ToString();
+                    //Models.ModelExpedientes.candidatRechz.ToString();
+
+                    //ValidateFormaUsers();
+                    ValidateOJTUsers();
+                    //ValidateRECHZUsers();
 
                 }
                 else
@@ -109,6 +111,96 @@ namespace RPAUserAdminOJT.Controllers
                 principalContext.Dispose();
             }
         }
+
+
+        public static void ValidateFormaUsers()
+        {
+
+            ArrayList formaList = new ArrayList();
+            string resultForma = string.Empty;
+
+            for (int i = 0; i < Models.ModelExpedientes.candidatForma.Count; i++)
+            {
+                string forma = Models.ModelExpedientes.candidatForma[i].ToString();
+                string[] SPLTforma = forma.Split(';');
+
+                int yillFiles = SPLTforma.Length;
+
+                if (yillFiles == 10)
+                {
+                    for (int j = 0; j < SPLTforma.Count(); j++)
+                    {
+                        resultForma = SPLTforma[j].ToString();
+                        formaList.Add(resultForma);
+                    }
+                    formaList.ToString();
+                }
+
+                formaList.Clear();
+            }
+
+        }
+
+
+        public static void ValidateOJTUsers()
+        {
+
+            ArrayList OJTList = new ArrayList();
+            string resultOJT = string.Empty;
+
+            for (int i = 0; i < Models.ModelExpedientes.candidatOJT.Count; i++)
+            {
+                string ojt = Models.ModelExpedientes.candidatOJT[i].ToString();
+                string[] SPLTOjt = ojt.Split(';');
+
+                int yillFiles = SPLTOjt.Length;
+
+                if (yillFiles == 10)
+                {
+                    for (int j = 0; j < SPLTOjt.Count(); j++)
+                    {
+                        resultOJT = SPLTOjt[j].ToString();
+                        OJTList.Add(resultOJT);
+                    }
+                    OJTList.ToString();
+                }
+
+                OJTList.Clear();
+            }
+
+        }
+
+
+        public static void ValidateRECHZUsers()
+        {
+
+            ArrayList RECHZList = new ArrayList();
+            string resultRECHZ = string.Empty;
+
+            for (int i = 0; i < Models.ModelExpedientes.candidatRechz.Count; i++)
+            {
+                string rechz = Models.ModelExpedientes.candidatRechz[i].ToString();
+                string[] SPLTRechz = rechz.Split(';');
+
+                int yillFiles = SPLTRechz.Length;
+
+                if (yillFiles == 10)
+                {
+                    for (int j = 0; j < SPLTRechz.Count(); j++)
+                    {
+                        resultRECHZ = SPLTRechz[j].ToString();
+                        RECHZList.Add(resultRECHZ);
+                    }
+                    RECHZList.ToString();
+                }
+
+                RECHZList.Clear();
+            }
+
+        }
+
+
+
 
         public static void Create()
         {
