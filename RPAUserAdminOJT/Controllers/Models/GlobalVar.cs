@@ -20,6 +20,7 @@ namespace RPAUserAdminOJT.Controllers.Models
         public static int countNOProcess = 0;
 
         public static string filePath = string.Empty;
+        public static string RedUser = string.Empty;
 
         public static bool outLoadFile = false;
 

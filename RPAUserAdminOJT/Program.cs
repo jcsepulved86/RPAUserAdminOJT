@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.DirectoryServices.AccountManagement;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -12,6 +13,11 @@ namespace RPAUserAdminOJT.Controllers
 {
     public class Program
     {
+        public static string firstNAME = string.Empty;
+        public static string secondNAME = string.Empty;
+        public static string lastNAME = string.Empty;
+        public static string secondlastNAME = string.Empty;
+        public static Dictionary<string, string> DCTbassement = new Dictionary<string, string>();
 
         public static void Main(string[] args)
         {
@@ -34,7 +40,28 @@ namespace RPAUserAdminOJT.Controllers
             string nombre_pcrc = string.Empty;
             string tipo_estado = string.Empty;
 
-            Models.GlobalVar.filePath = @"C:\Users\juan.sepulveda.m\Downloads\Respaldo_Download\usersAdmir.csv";
+            Models.GlobalVar.filePath = @"C:\AllGithub\RPAUserAdminOJT\RPAUserAdminOJT\bin\Debug\UserBassemet.csv";
+
+            string result = string.Empty;
+            string[] filelines = File.ReadAllLines(Models.GlobalVar.filePath);
+            ArrayList UBassement = new ArrayList();
+            Models.Employee employee = new Models.Employee();
+
+            for (int a = 1; a < filelines.Length; a++)
+            {
+                string[] fillines = filelines[a].Split(';');
+                int yillFiles = fillines.Length;
+
+                if (yillFiles == 7)
+                {
+                    try
+                    {
+                        DCTbassement.Add(fillines[3].ToString().Trim(), fillines[0].ToString());
+                    }
+                    catch { }
+
+                }
+            }
 
             using (PrincipalContext principalContext = new PrincipalContext(ContextType.Domain, Models.GlobalVar.Domain))
             {
@@ -94,10 +121,6 @@ namespace RPAUserAdminOJT.Controllers
 
                     }
 
-                    //Models.ModelExpedientes.candidatForma.ToString();
-                    //Models.ModelExpedientes.candidatOJT.ToString();
-                    //Models.ModelExpedientes.candidatRechz.ToString();
-
                     //ValidateFormaUsers();
                     ValidateOJTUsers();
                     //ValidateRECHZUsers();
@@ -113,59 +136,157 @@ namespace RPAUserAdminOJT.Controllers
         }
 
 
-        public static void ValidateFormaUsers()
+        public static void ValidateOJTUsers()
         {
 
-            ArrayList formaList = new ArrayList();
-            string resultForma = string.Empty;
-
-            for (int i = 0; i < Models.ModelExpedientes.candidatForma.Count; i++)
+            try
             {
-                string forma = Models.ModelExpedientes.candidatForma[i].ToString();
-                string[] SPLTforma = forma.Split(';');
+                Models.Employee employee = new Models.Employee();
 
-                int yillFiles = SPLTforma.Length;
+                ArrayList OJTList = new ArrayList();
+                string resultOJT = string.Empty;
 
-                if (yillFiles == 10)
+                for (int i = 25; i < Models.ModelExpedientes.candidatOJT.Count; i++)
                 {
-                    for (int j = 0; j < SPLTforma.Count(); j++)
-                    {
-                        resultForma = SPLTforma[j].ToString();
-                        formaList.Add(resultForma);
-                    }
-                    formaList.ToString();
-                }
+                    string forma = Models.ModelExpedientes.candidatOJT[i].ToString();
+                    string[] SPLTforma = forma.Split(';');
 
-                formaList.Clear();
+                    int yillFiles = SPLTforma.Length;
+
+                    if (yillFiles == 10)
+                    {
+                        for (int j = 0; j < SPLTforma.Count(); j++)
+                        {
+                            resultOJT = SPLTforma[j].ToString();
+                            OJTList.Add(resultOJT);
+                        }
+                        OJTList.ToString();
+
+                        string usrd = Function.Delete.Cedula(OJTList[2].ToString());
+
+                        if (usrd!= "")
+                        {
+                            //Function.Delete.User(usrd);
+                        }
+
+                        string nombre = OJTList[7].ToString();
+
+                        string usuarioRed = NetworkAccountName(nombre,1);
+
+                        employee.SamAccountName = usuarioRed;
+                        employee.GivenName = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(firstNAME);
+                        employee.MiddleName = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(secondNAME);
+                        employee.FirstLastName = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(lastNAME);
+                        employee.SecondLastName = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(secondlastNAME);
+                        employee.PostOfficeBox = OJTList[2].ToString();
+                        if (OJTList[1].ToString() == "0")
+                        {
+                            employee.UserBasement = "pruebas.bot.1";
+                        }
+                        else
+                        {
+                            employee.UserBasement = DCTbassement[OJTList[1].ToString()];
+                        }
+                        employee.TicketID = "";
+                        employee.HomePage = "allus.com.co";
+                        employee.City = "Medellin";
+                        employee.State = "Antioquia";
+                        employee.Country = "Colombia";
+                        employee.Description = OJTList[6].ToString();
+                        employee.Domain = "multienlace.com.co";
+                        employee.Department = "Interno";
+                        employee.Company = "Konecta";
+
+                        Function.Create.User(employee.FirstLastName, employee.SecondLastName,
+                                        employee.GivenName, employee.MiddleName, employee.Domain,
+                                        employee.HomePage, employee.Country, employee.State, employee.City, employee.PostOfficeBox, employee.SamAccountName,
+                                        employee.Description, employee.Department, employee.Company, employee.UserBasement);
+
+
+                        if (employee.UserBasement != "pruebas.bot.1")
+                        {
+                            ActiveDirectory.Services.ServicesProvider.User_Add_Group(employee.SamAccountName, employee.UserBasement);
+                        }
+                        else
+                        {
+                            ///LOG ERROR sin usuario base
+                        }
+
+
+                    }
+
+                    OJTList.Clear();
+                }
+            }
+            catch(Exception ex)
+            {
+
             }
 
         }
 
 
-        public static void ValidateOJTUsers()
+        public static void ValidateFormaUsers()
         {
 
-            ArrayList OJTList = new ArrayList();
-            string resultOJT = string.Empty;
-
-            for (int i = 0; i < Models.ModelExpedientes.candidatOJT.Count; i++)
+             try
             {
-                string ojt = Models.ModelExpedientes.candidatOJT[i].ToString();
-                string[] SPLTOjt = ojt.Split(';');
+                Models.Employee employee = new Models.Employee();
 
-                int yillFiles = SPLTOjt.Length;
+                ArrayList formaList = new ArrayList();
+                string resultForma = string.Empty;
 
-                if (yillFiles == 10)
+                for (int i = 1; i < Models.ModelExpedientes.candidatForma.Count; i++)
                 {
-                    for (int j = 0; j < SPLTOjt.Count(); j++)
-                    {
-                        resultOJT = SPLTOjt[j].ToString();
-                        OJTList.Add(resultOJT);
-                    }
-                    OJTList.ToString();
-                }
+                    string forma = Models.ModelExpedientes.candidatForma[i].ToString();
+                    string[] SPLTforma = forma.Split(';');
 
-                OJTList.Clear();
+                    int yillFiles = SPLTforma.Length;
+
+                    if (yillFiles == 10)
+                    {
+                        for (int j = 0; j < SPLTforma.Count(); j++)
+                        {
+                            resultForma = SPLTforma[j].ToString();
+                            formaList.Add(resultForma);
+                        }
+                        formaList.ToString();
+
+                        string nombre = formaList[7].ToString();
+
+                        string usuarioRed = NetworkAccountName(nombre,0);
+
+                        employee.SamAccountName = usuarioRed;
+                        employee.GivenName = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(firstNAME);
+                        employee.MiddleName = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(secondNAME);
+                        employee.FirstLastName = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(lastNAME);
+                        employee.SecondLastName = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(secondlastNAME);
+                        employee.PostOfficeBox = formaList[2].ToString();
+                        employee.UserBasement = "pruebas.bot.1";
+                        employee.TicketID = "";
+                        employee.HomePage = "allus.com.co";
+                        employee.City = "Medellin";
+                        employee.State = "Antioquia";
+                        employee.Country = "Colombia";
+                        employee.Description = "Usuarios en formacion BOT";
+                        employee.Domain = "multienlace.com.co";
+                        employee.Department = "Interno";
+                        employee.Company = "Konecta";
+
+                        Function.Create.User(employee.FirstLastName, employee.SecondLastName,
+                                        employee.GivenName, employee.MiddleName, employee.Domain,
+                                        employee.HomePage, employee.Country, employee.State, employee.City, employee.PostOfficeBox, employee.SamAccountName,
+                                        employee.Description, employee.Department, employee.Company, employee.UserBasement);
+
+
+                    }
+
+                    formaList.Clear();
+                }
+            }
+            catch(Exception ex)
+            {
+
             }
 
         }
@@ -191,7 +312,16 @@ namespace RPAUserAdminOJT.Controllers
                         resultRECHZ = SPLTRechz[j].ToString();
                         RECHZList.Add(resultRECHZ);
                     }
+
+
                     RECHZList.ToString();
+
+                    string usrd = Function.Delete.Cedula(RECHZList[2].ToString());
+
+                    if (usrd != "")
+                    {
+                        //Function.Delete.User(usrd);
+                    }
                 }
 
                 RECHZList.Clear();
@@ -200,153 +330,109 @@ namespace RPAUserAdminOJT.Controllers
         }
 
 
-
-
-        public static void Create()
+        public static string NetworkAccountName(string REDUser, int vState)
         {
+            string validAccountName = string.Empty;
 
-            string result = string.Empty;
-            string[] filelines = File.ReadAllLines(Models.GlobalVar.filePath);
-            ArrayList employeeList = new ArrayList();
-            Models.Employee employee = new Models.Employee();
-
-            Models.GlobalVar.outLoadFile = false;
-
-            for (int a = 1; a < filelines.Length; a++)
+            try
             {
-                string[] fillines = filelines[a].Split(',');
-                int yillFiles = fillines.Length;
+                string[] SPLName = REDUser.Split(' ');
 
-                if (yillFiles == 16)
+                if (vState == 0)
                 {
-                    for (int i = 0; i < fillines.Length; i++)
-                    {
-                        result = fillines[i].ToString();
-                        employeeList.Add(result);
-                    }
+                    firstNAME = SPLName[0].ToString().ToLower();
+                    secondNAME = SPLName[1].ToString().ToLower();
+                    lastNAME = SPLName[2].ToString().ToLower();
+                    secondlastNAME = SPLName[3].ToString().ToLower();
+                }
+                else
+                {
+                    firstNAME = SPLName[2].ToString().ToLower();
+                    secondNAME = SPLName[3].ToString().ToLower();
+                    lastNAME = SPLName[0].ToString().ToLower();
+                    secondlastNAME = SPLName[1].ToString().ToLower();
+                }
+                
+                bool flag = false;
 
-                    employee.SamAccountName = employeeList[0].ToString();
-                    employee.GivenName = employeeList[1].ToString();
-                    employee.MiddleName = employeeList[2].ToString();
-                    employee.FirstLastName = employeeList[3].ToString();
-                    employee.SecondLastName = employeeList[4].ToString();
-                    employee.PostOfficeBox = employeeList[5].ToString();
-                    employee.UserBasement = employeeList[6].ToString();
-                    employee.TicketID = employeeList[7].ToString();
-                    employee.HomePage = employeeList[8].ToString();
-                    employee.City = employeeList[9].ToString();
-                    employee.State = employeeList[10].ToString();
-                    employee.Country = employeeList[11].ToString();
-                    employee.Description = employeeList[12].ToString();
-                    employee.Domain = employeeList[13].ToString();
-                    employee.Department = employeeList[14].ToString();
-                    employee.Company = employeeList[15].ToString();
+                validAccountName = firstNAME + "." + lastNAME;
 
-                    if (Models.GlobalVar.desactiveAccount == true)
+                using (PrincipalContext principalContext = new PrincipalContext(ContextType.Domain, "multienlace.com.co"))
+                {
+                    UserPrincipal user = UserPrincipal.FindByIdentity(principalContext, validAccountName);
+
+                    if (user == null)
                     {
-                        ActiveDirectory.Services.ServicesProvider.DisableAccount(employee.SamAccountName);
-                        Models.GlobalVar.countYESProcess++;
+                        return validAccountName;
                     }
                     else
                     {
-                        Function.Create.User(employee.FirstLastName, employee.SecondLastName,
-                                    employee.GivenName, employee.MiddleName, employee.Domain,
-                                    employee.HomePage, employee.Country, employee.State, employee.City, employee.PostOfficeBox, employee.SamAccountName,
-                                    employee.Description, employee.Department, employee.Company, employee.UserBasement);
 
-                        if (Models.GlobalVar.outLoadFile == true)
+                        if (secondlastNAME != "")
                         {
-                            break;
+                            for (int i = 1; i < 3; i++)
+                            {
+                                validAccountName = firstNAME + "." + lastNAME + "." + secondlastNAME.Substring(0, i);
+
+                                user = UserPrincipal.FindByIdentity(principalContext, validAccountName);
+
+                                if (user == null)
+                                {
+                                    flag = true;
+                                    break;
+                                }
+                                else
+                                {
+                                    continue;
+                                }
+                            }
+                            if (!flag)
+                            {
+                                validAccountName = firstNAME + "." + lastNAME.Substring(0, lastNAME.Length - 1);
+                                user = UserPrincipal.FindByIdentity(principalContext, validAccountName);
+
+                                if (user != null)
+                                {
+                                    //Log error
+                                }
+                            }
+                        }
+                        else
+                        {
+                            if (secondNAME != "")
+                            {
+                                validAccountName = firstNAME + "." + lastNAME + "." + secondNAME.Substring(0, 1);
+                            }
+                            else
+                            {
+                                validAccountName = firstNAME + "." + lastNAME.Substring(0, lastNAME.Length - 1);
+                            }
+
+
+                            user = UserPrincipal.FindByIdentity(principalContext, validAccountName);
+
+                            if (user != null)
+                            {
+                                //Log error
+                            }
+
                         }
 
-                        if (Models.GlobalVar.NeverPswd == true)
-                        {
-                            ActiveDirectory.Services.ServicesProvider.PasswordNeverExpires(employee.SamAccountName);
-                        }
 
-                        if (Models.GlobalVar.addUserGroup == true)
-                        {
-                            ActiveDirectory.Services.ServicesProvider.User_Add_Group(employee.SamAccountName, employee.UserBasement);
-                        }
                     }
 
-                    employeeList.Clear();
+                    principalContext.Dispose();
+                    return validAccountName;
                 }
-                else
-                {
-                    break;
-                }
-
             }
-
-            MessageBox.Show("Datos Creados: " + Models.GlobalVar.countYESProcess.ToString() + "\n" + "Datos No Creados: " + Models.GlobalVar.countNOProcess.ToString());
-        }
-
-        public static void Deleted()
-        {
-            int qtyFile = 0;
-            Models.GlobalVar.countYESProcess = 0;
-            Models.GlobalVar.countNOProcess = 0;
-
-            string result = string.Empty;
-            string[] filelines = File.ReadAllLines(Models.GlobalVar.filePath);
-
-            ArrayList employeeList = new ArrayList();
-            Controllers.Models.Employee employee = new Controllers.Models.Employee();
-
-            qtyFile = filelines.Count();
-
-            Models.GlobalVar.deleteEntires = false;
-
-            for (int a = 1; a < filelines.Length; a++)
+            catch (Exception ex)
             {
-                string[] fillines = filelines[a].Split(',');
-                int yillFiles = fillines.Length;
-
-                if (yillFiles == 16)
-                {
-                    for (int i = 0; i < fillines.Length; i++)
-                    {
-                        result = fillines[i].ToString();
-                        employeeList.Add(result);
-                    }
-
-                    employee.SamAccountName = employeeList[0].ToString();
-                    employee.GivenName = employeeList[1].ToString();
-                    employee.MiddleName = employeeList[2].ToString();
-                    employee.FirstLastName = employeeList[3].ToString();
-                    employee.SecondLastName = employeeList[4].ToString();
-                    employee.PostOfficeBox = employeeList[5].ToString();
-                    employee.UserBasement = employeeList[6].ToString();
-                    employee.TicketID = employeeList[7].ToString();
-                    employee.HomePage = employeeList[8].ToString();
-                    employee.City = employeeList[9].ToString();
-                    employee.State = employeeList[10].ToString();
-                    employee.Country = employeeList[11].ToString();
-                    employee.Description = employeeList[12].ToString();
-                    employee.Domain = employeeList[13].ToString();
-                    employee.Department = employeeList[14].ToString();
-                    employee.Company = employeeList[15].ToString();
-
-                    Function.Delete.User(employee.SamAccountName);
-
-                    if (Models.GlobalVar.deleteEntires == true)
-                    {
-                        //Controllers.LogFiles.LogApplication.LogWrite("Delete User ==> " + "El usuario: " + Controllers.Models.globalvar.useradm + ", no tiene permisos para modificar el Directorio Activo");
-                        break;
-                    }
-
-                    employeeList.Clear();
-                }
-                else
-                {
-                    break;
-                }
-
+                return validAccountName;
             }
 
-            MessageBox.Show("Datos Eliminados: " + Models.GlobalVar.countYESProcess.ToString() + "\n" + "Datos No Eliminados: " + Models.GlobalVar.countNOProcess.ToString());
         }
+
+
 
     }
 }
