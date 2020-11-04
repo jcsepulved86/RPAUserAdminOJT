@@ -6,6 +6,7 @@ namespace RPAUserAdminOJT.Controllers.Models
     {
 
         public static string Domain = "multienlace.com.co";
+        public static string Move = "Retiros";
         public static string UserAdm = "user.gestusuarios";
         public static string Passwrd = "6r](71w67vy9*";
         public static string passwordUser = string.Empty;

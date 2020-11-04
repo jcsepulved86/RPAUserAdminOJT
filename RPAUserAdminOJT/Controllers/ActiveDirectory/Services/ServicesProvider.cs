@@ -290,14 +290,143 @@ namespace RPAUserAdminOJT.Controllers.ActiveDirectory.Services
             principalContext.Dispose();
         }
 
-        public static void DisableAccount(string users)
+        public static void DisableAccount(string users, string distname)
         {
-            UserPrincipal user = Query.QueryProvider.Get(users);
-            user.Enabled = false;
-            user.Save();
+            try
+            {
+                UserPrincipal user = Query.QueryProvider.Get(users);
+                user.Enabled = false;
+                user.Save();
 
-            user.Dispose();
-            principalContext.Dispose();
+                user.Dispose();
+                principalContext.Dispose();
+
+                //string MainConnectionPrefix = $"LDAP://{Models.GlobalVar.Domain}";
+                //string MoveConnectionPrefix = $"LDAP://{Models.GlobalVar.Domain},{Models.GlobalVar.Move}";
+
+                //DirectoryEntry MainldapLocation = new DirectoryEntry(MainConnectionPrefix);
+                //DirectoryEntry MoveldapLocation = new DirectoryEntry(MoveConnectionPrefix, Models.GlobalVar.UserAdm, Models.GlobalVar.Passwrd);
+
+                DirectoryEntry MainldapLocation = new DirectoryEntry("LDAP://" + distname, Models.GlobalVar.UserAdm, Models.GlobalVar.Passwrd);
+                DirectoryEntry MoveldapLocation = new DirectoryEntry("LDAP://" + "OU=Retiros,DC=multienlace,DC=com,DC=co", Models.GlobalVar.UserAdm, Models.GlobalVar.Passwrd);
+
+                MainldapLocation.MoveTo(MoveldapLocation);
+
+                MainldapLocation.Close();
+                MainldapLocation.Close();
+
+
+
+
+
+                LOGRobotica.Controllers.LogApplication.LogWrite("Disable Account ==> " + "Usuario: " + users + ", se ha deshabilitado");
+            }
+            catch(Exception ex)
+            {
+                LOGRobotica.Controllers.LogApplication.LogWrite("Disable Account ==> " + "Error: " + ex.Message + ", imposible en deshabilitarlo");
+            }
+
+        }
+
+
+        public static void EnableAccount(string users)
+        {
+            try
+            {
+                UserPrincipal user = Query.QueryProvider.Get(users);
+                user.Enabled = true;
+                user.Save();
+
+                user.Dispose();
+                principalContext.Dispose();
+
+                LOGRobotica.Controllers.LogApplication.LogWrite("Enable Account ==> " + "Usuario: " + users + ", se ha habilitado");
+            }
+            catch (Exception ex)
+            {
+                LOGRobotica.Controllers.LogApplication.LogWrite("Enable Account ==> " + "Error: " + ex.Message + ", imposible en habilitarlo");
+            }
+        }
+
+
+
+        public static string DistGuiName(string Cedula)
+        {
+            string distinguishedname = string.Empty;
+
+            try
+            {
+                string connectionPrefix = $"LDAP://{Models.GlobalVar.Domain}";
+
+                DirectoryEntry ldapConnection = new DirectoryEntry(connectionPrefix, Models.GlobalVar.UserAdm, Models.GlobalVar.Passwrd);
+
+                ldapConnection.Path = connectionPrefix;
+                ldapConnection.AuthenticationType = AuthenticationTypes.Secure;
+
+                DirectoryEntry myLdapConnection = ldapConnection;
+
+                DirectorySearcher ds = new DirectorySearcher(myLdapConnection);
+
+                ds.Filter = "(&((&(objectCategory=Person)(objectClass=User)))(postOfficeBox=" + Cedula + "))";
+
+                ds.SearchScope = SearchScope.Subtree;
+
+                SearchResult rs = ds.FindOne();
+
+                if (rs.GetDirectoryEntry().Properties["distinguishedname"].Value != null)
+                {
+                    distinguishedname = rs.GetDirectoryEntry().Properties["distinguishedname"].Value.ToString();
+                }
+
+                return distinguishedname;
+
+            }
+
+            catch (Exception e)
+            {
+                Console.WriteLine("Exception caught:\n\n" + e.ToString());
+                return distinguishedname;
+            }
+        }
+
+
+        public static string UserNetwork(string Cedula)
+        {
+            string userRED = string.Empty;
+
+            try
+            {
+                string connectionPrefix = $"LDAP://{Models.GlobalVar.Domain}";
+
+                DirectoryEntry ldapConnection = new DirectoryEntry(connectionPrefix, Models.GlobalVar.UserAdm, Models.GlobalVar.Passwrd);
+
+                ldapConnection.Path = connectionPrefix;
+                ldapConnection.AuthenticationType = AuthenticationTypes.Secure;
+
+                DirectoryEntry myLdapConnection = ldapConnection;
+
+                DirectorySearcher ds = new DirectorySearcher(myLdapConnection);
+
+                ds.Filter = "(&((&(objectCategory=Person)(objectClass=User)))(postOfficeBox=" + Cedula + "))";
+
+                ds.SearchScope = SearchScope.Subtree;
+
+                SearchResult rs = ds.FindOne();
+
+                if (rs.GetDirectoryEntry().Properties["samaccountname"].Value != null)
+                {
+                    userRED = rs.GetDirectoryEntry().Properties["samaccountname"].Value.ToString();
+                }
+
+                return userRED;
+
+            }
+
+            catch (Exception e)
+            {
+                Console.WriteLine("Exception caught:\n\n" + e.ToString());
+                return userRED;
+            }
         }
 
 

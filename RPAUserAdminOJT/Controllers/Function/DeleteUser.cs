@@ -67,12 +67,12 @@ namespace RPAUserAdminOJT.Controllers.Function
                 if (user != null)
                 {
                     user.Delete();
-                    //Controllers.LogFiles.LogApplication.LogWrite("Delete User ==> " + "Usuario: " + users + ", eliminado");
+                    LOGRobotica.Controllers.LogApplication.LogWrite("Delete User ==> " + "Usuario: " + users + ", eliminado");
                     Models.GlobalVar.countYESProcess++;
                 }
                 else
                 {
-                    //Controllers.LogFiles.LogApplication.LogWrite("Delete User ==> " + "Usuario: " + users + ", No existe");
+                    LOGRobotica.Controllers.LogApplication.LogWrite("Delete User ==> " + "Usuario: " + users + ", No existe");
                     Models.GlobalVar.countNOProcess++;
                 }
 
@@ -96,7 +96,7 @@ namespace RPAUserAdminOJT.Controllers.Function
                 }
                 else
                 {
-                    //Controllers.LogFiles.LogApplication.LogWrite("Delete User ==> " + "Error: No se pudo encontrar el usuario");
+                    LOGRobotica.Controllers.LogApplication.LogWrite("Delete User ==> " + "Error: No se pudo encontrar el usuario");
                     Models.GlobalVar.countNOProcess++;
                 }
 

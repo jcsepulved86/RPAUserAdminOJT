@@ -1,12 +1,13 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+#region USING
 using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Net;
-using System.Web.Script.Serialization;
+#endregion
 
 namespace RPAUserAdminOJT.Controllers.Function
 {
