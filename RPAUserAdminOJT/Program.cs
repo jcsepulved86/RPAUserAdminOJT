@@ -1,6 +1,6 @@
-﻿using System;
+﻿#region USINGS
+using System;
 using System.Collections;
-#region USING
 using System.Collections.Generic;
 using System.Configuration;
 using System.DirectoryServices.AccountManagement;
@@ -14,41 +14,20 @@ namespace RPAUserAdminOJT.Controllers
 {
     public class Program
     {
-        #region Global Variable
+        #region STATIC VARIABLE
         public static string firstNAME = string.Empty;
         public static string secondNAME = string.Empty;
         public static string lastNAME = string.Empty;
         public static string secondlastNAME = string.Empty;
         public static Dictionary<string, string> DCTbassement = new Dictionary<string, string>();
-        public static string PathRoot = ConfigurationManager.AppSettings["pathRoot"];
+        public static string rootUBassemet = ConfigurationManager.AppSettings["rootUBassemet"];
         #endregion
 
-        #region MAIN ACTIVITIES
+        #region Main Activities
         public static void Main(string[] args)
         {
             #region Hidden
             //Function.Delete.User("harold.rodriguez.d");
-            //Function.Delete.User("manuela.ruda");
-            //Function.Delete.User("guillermo.poveda.a");
-            //Function.Delete.User("jaime.martinez.a");
-            //Function.Delete.User("daniel.bustamante.v");
-            //Function.Delete.User("camilo.perez.j");
-            //Function.Delete.User("valentina.arias.v");
-            //Function.Delete.User("leon.posada.l");
-            //Function.Delete.User("maria.viloria.v");
-            //Function.Delete.User("estefanny.santamaria.v");
-            //Function.Delete.User("leidy.martínez.go");
-            //Function.Delete.User("maria.andrade.t");
-            //Function.Delete.User("cristian.calle.u");
-            //Function.Delete.User("mayra.serna.ur");
-            //Function.Delete.User("juliana.gonzalez.a");
-            //Function.Delete.User("juan.rio");
-            //Function.Delete.User("elizabeth.rodriguez.t");
-            //Function.Delete.User("daniela.olarte.m");
-            //Function.Delete.User("cristian.ocampo.c");
-            //Function.Delete.User("arley.montoya.m");
-            //Function.Delete.User("blyangil.zuleta.c");
-
             //ActiveDirectory.Services.ServicesProvider.DisableAccount("prueba.prueba");
             //ActiveDirectory.Services.ServicesProvider.EnableAccount(usrd);
             #endregion
@@ -72,7 +51,7 @@ namespace RPAUserAdminOJT.Controllers
             string nombre_pcrc = string.Empty;
             string tipo_estado = string.Empty;
 
-            Models.GlobalVar.filePath = PathRoot;
+            Models.GlobalVar.filePath = rootUBassemet;
 
             string result = string.Empty;
             string[] filelines = File.ReadAllLines(Models.GlobalVar.filePath);
@@ -102,49 +81,81 @@ namespace RPAUserAdminOJT.Controllers
                 if (isValid != false)
                 {
 
-                    string NToken = Function.ConsultAPI.getToken();
-                    IList<Models.ModelExpedientes> exped = Function.ConsultAPI.getExpedientes(NToken);
+                    string NToken = Utility.ConsultAPI.getToken();
+                    IList<Models.ModelExpedientes> exped = Utility.ConsultAPI.getExpedientes(NToken);
 
                     for (int i = 0; i < exped.Count; i++)
                     {
 
-                        try
-                        {
-                            ceco = string.Empty;
-                            cod_pcrc = string.Empty;
-                            documento = string.Empty;
-                            id_dp_cargos = string.Empty;
-                            id_dp_estados = string.Empty;
-                            nombre_cargo = string.Empty;
-                            nombre_ceco = string.Empty;
-                            nombre_completo = string.Empty;
-                            nombre_pcrc = string.Empty;
-                            tipo_estado = string.Empty;
+                        ceco = string.Empty;
+                        cod_pcrc = string.Empty;
+                        documento = string.Empty;
+                        id_dp_cargos = string.Empty;
+                        id_dp_estados = string.Empty;
+                        nombre_cargo = string.Empty;
+                        nombre_ceco = string.Empty;
+                        nombre_completo = string.Empty;
+                        nombre_pcrc = string.Empty;
+                        tipo_estado = string.Empty;
 
+                        if (exped[i].ceco == null)
+                            ceco = "";
+                        else
                             ceco = exped[i].ceco.ToString();
+
+                        if (exped[i].cod_pcrc == null)
+                            cod_pcrc = "";
+                        else
                             cod_pcrc = exped[i].cod_pcrc.ToString();
+
+                        if (exped[i].documento == null)
+                            documento = "";
+                        else
                             documento = exped[i].documento.ToString();
+
+                        if (exped[i].id_dp_cargos == null)
+                            id_dp_cargos = "";
+                        else
                             id_dp_cargos = exped[i].id_dp_cargos.ToString();
+
+                        if (exped[i].id_dp_estados == null)
+                            id_dp_estados = "";
+                        else
                             id_dp_estados = exped[i].id_dp_estados.ToString();
+
+                        if (exped[i].nombre_cargo == null)
+                            nombre_cargo = "";
+                        else
                             nombre_cargo = exped[i].nombre_cargo.ToString();
+
+                        if (exped[i].nombre_ceco == null)
+                            nombre_ceco = "";
+                        else
                             nombre_ceco = exped[i].nombre_ceco.ToString();
+
+                        if (exped[i].nombre_completo == null)
+                            nombre_completo = "";
+                        else
                             nombre_completo = exped[i].nombre_completo.ToString();
+
+                        if (exped[i].nombre_pcrc == null)
+                            nombre_pcrc = "";
+                        else
                             nombre_pcrc = exped[i].nombre_pcrc.ToString();
+
+                        if (exped[i].tipo_estado == null)
+                            tipo_estado = "";
+                        else
                             tipo_estado = exped[i].tipo_estado.ToString();
 
-                            if (id_dp_estados == "309")
-                            {
-                                Models.ModelExpedientes.candidatForma.Add(ceco + ";" + cod_pcrc + ";" + documento + ";" + id_dp_cargos + ";" + id_dp_estados + ";" + nombre_cargo + ";" + nombre_ceco + ";" + nombre_completo + ";" + nombre_pcrc + ";" + tipo_estado);
-                            }
-                            else if (id_dp_estados == "305" || id_dp_estados == "317" || id_dp_estados == "327")
-                            {
-                                Models.ModelExpedientes.candidatRechz.Add(ceco + ";" + cod_pcrc + ";" + documento + ";" + id_dp_cargos + ";" + id_dp_estados + ";" + nombre_cargo + ";" + nombre_ceco + ";" + nombre_completo + ";" + nombre_pcrc + ";" + tipo_estado);
-                            }
 
-                        }
-                        catch(Exception ex)
+                        if (id_dp_estados == "309")
                         {
-                            LOGRobotica.Controllers.LogApplication.LogWrite("Initialize ==> " + "Error: " + ex.Message);
+                            Models.ModelExpedientes.candidatForma.Add(ceco + ";" + cod_pcrc + ";" + documento + ";" + id_dp_cargos + ";" + id_dp_estados + ";" + nombre_cargo + ";" + nombre_ceco + ";" + nombre_completo + ";" + nombre_pcrc + ";" + tipo_estado);
+                        }
+                        else if (id_dp_estados == "305" || id_dp_estados == "317" || id_dp_estados == "327")
+                        {
+                            Models.ModelExpedientes.candidatRechz.Add(ceco + ";" + cod_pcrc + ";" + documento + ";" + id_dp_cargos + ";" + id_dp_estados + ";" + nombre_cargo + ";" + nombre_ceco + ";" + nombre_completo + ";" + nombre_pcrc + ";" + tipo_estado);
                         }
 
                     }
@@ -152,13 +163,13 @@ namespace RPAUserAdminOJT.Controllers
                     Models.ModelExpedientes.candidatForma.ToString();
                     Models.ModelExpedientes.candidatRechz.ToString();
 
-                    //ValidateFormaUsers();
-                    ValidateRECHZUsers();
+                    ValidateFormaUsers();
+                    //ValidateRECHZUsers();
 
                 }
                 else
                 {
-                    MessageBox.Show("Las credenciales ingresadas no son validas, por favor verifique e intente nuevamente", "RPAKonecta - Alerta", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    LOGRobotica.Controllers.LogApplication.LogWrite("Initialize ==> " + "El usuario: " + Models.GlobalVar.UserAdm + ", las credenciales ingresadas no son validas, por favor verifique e intente nuevamente");
                 }
 
                 principalContext.Dispose();
@@ -252,6 +263,7 @@ namespace RPAUserAdminOJT.Controllers
                         else
                         {
                             LOGRobotica.Controllers.LogApplication.LogWrite("ValidateFormaUsers ==> " + "El nombre: " + formaList[7].ToString() + ", no posee codigo PCRC");
+                            //Utility.FillExcel.WriteExcel("Validate Users", formaList[7].ToString(), "no posee codigo PCRC");
                         }
 
 
@@ -300,7 +312,8 @@ namespace RPAUserAdminOJT.Controllers
                     }
                     else
                     {
-                        LOGRobotica.Controllers.LogApplication.LogWrite("Validate Users - Type: " + RECHZList[9].ToString() +" ==> " + "State: " + RECHZList[4].ToString() + ", FullName: " + RECHZList[7].ToString());
+                        LOGRobotica.Controllers.LogApplication.LogWrite("Validate Users - Type: " + RECHZList[9].ToString() +" ==> " + "State: " + RECHZList[4].ToString() + ", FullName: " + RECHZList[7].ToString() + ", no posee codigo PCRC");
+                        Utility.FillExcel.WriteExcel("Retreat Users", RECHZList[7].ToString(), "no posee codigo PCRC");
                     }
 
                 }

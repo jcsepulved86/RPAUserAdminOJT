@@ -37,12 +37,17 @@
     <ApplicationIcon>Icon\konecta.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="CsvHelper, Version=15.0.0.0, Culture=neutral, PublicKeyToken=8c4959082be5c823, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Controllers\Library\CsvHelper.dll</HintPath>
+    </Reference>
     <Reference Include="LOGRobotica, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Controllers\Library\LOGRobotica.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Controllers\Library\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
@@ -72,7 +77,6 @@
     <Compile Include="Controllers\ActiveDirectory\Query\QueryProvider.cs" />
     <Compile Include="Controllers\ActiveDirectory\Services\IServicesProvider.cs" />
     <Compile Include="Controllers\ActiveDirectory\Services\ServicesProvider.cs" />
-    <Compile Include="Controllers\Function\ConsultAPI.cs" />
     <Compile Include="Controllers\Function\CreateUser.cs" />
     <Compile Include="Controllers\Function\DeleteUser.cs" />
     <Compile Include="Controllers\Models\AdUser.cs" />
@@ -80,6 +84,8 @@
     <Compile Include="Controllers\Models\GlobalVar.cs" />
     <Compile Include="Controllers\Models\Group.cs" />
     <Compile Include="Controllers\Models\ModelExpedientes.cs" />
+    <Compile Include="Controllers\Utility\ConsultAPI.cs" />
+    <Compile Include="Controllers\Utility\FillExcel.cs" />
     <Compile Include="Controllers\Utility\PasswordGenerator.cs" />
     <Compile Include="Controllers\Utility\TextFormatter.cs" />
     <Compile Include="Program.cs" />
@@ -89,10 +95,11 @@
     <None Include="App.config">
       <SubType>Designer</SubType>
     </None>
-    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Controllers\Library\CsvHelper.dll" />
     <Content Include="Controllers\Library\LOGRobotica.dll" />
+    <Content Include="Controllers\Library\Newtonsoft.Json.dll" />
     <Content Include="Icon\konecta.ico" />
   </ItemGroup>
   <ItemGroup />

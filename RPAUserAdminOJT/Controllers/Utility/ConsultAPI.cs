@@ -1,6 +1,6 @@
-﻿using Newtonsoft.Json;
+﻿#region USING
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-#region USING
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -9,7 +9,7 @@ using System.Linq;
 using System.Net;
 #endregion
 
-namespace RPAUserAdminOJT.Controllers.Function
+namespace RPAUserAdminOJT.Controllers.Utility
 {
     public class ConsultAPI
     {

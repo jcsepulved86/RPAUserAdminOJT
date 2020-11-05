@@ -50,20 +50,22 @@ namespace RPAUserAdminOJT.Controllers.Function
                     {
                         MessageBox.Show("El usuario: " + Models.GlobalVar.UserAdm + ", no tiene permisos para modificar el Directorio Activo", "RPAKonecta - Alerta", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                         LOGRobotica.Controllers.LogApplication.LogWrite("User Create ==> " + "El usuario: " + Models.GlobalVar.UserAdm + ", no tiene permisos para modificar el Directorio Activo");
-
+                        //Utility.FillExcel.WriteExcel("User Create", Models.GlobalVar.UserAdm, "no tiene permisos para modificar el Directorio Activo");
                         Models.GlobalVar.outLoadFile = true;
 
                     }
                     else
                     {
                         LOGRobotica.Controllers.LogApplication.LogWrite("User Create ==> " + "Usuario: " + user.SamAccountName + ", ya existe");
+                        //Utility.FillExcel.WriteExcel("User Create", user.SamAccountName, "ya existe");
                         Models.GlobalVar.countNOProcess++;
                     }
 
                 }
                 else
                 {
-                    LOGRobotica.Controllers.LogApplication.LogWrite("User Create ==> " + "Usuario: " + user.SamAccountName + " - " + "Clave: " + Models.GlobalVar.passwordUser);
+                    LOGRobotica.Controllers.LogApplication.LogWrite("User Create ==> " + "Usuario: " + user.SamAccountName);
+                    Utility.FillExcel.WriteExcel("User Create", user.SamAccountName, Models.GlobalVar.passwordUser);
                     Models.GlobalVar.countYESProcess++;
                 }
 

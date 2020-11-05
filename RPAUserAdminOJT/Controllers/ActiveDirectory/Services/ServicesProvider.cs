@@ -182,7 +182,6 @@ namespace RPAUserAdminOJT.Controllers.ActiveDirectory.Services
             string accessMessage = string.Empty;
             bool varaxu = false;
 
-
             try
             {
                 foreach (Models.Group group in groups)
@@ -217,6 +216,10 @@ namespace RPAUserAdminOJT.Controllers.ActiveDirectory.Services
                             {
                                 gp.Members.Add(principalContext, IdentityType.SamAccountName, sAMAccountName);
                                 gp.Save();
+
+                                LOGRobotica.Controllers.LogApplication.LogWrite("User AddGrp ==> " + "Usuario: " + sAMAccountName + ", esta directiva fue asignada: " + gp.Name);
+                                //Utility.FillExcel.WriteExcel("User Add Group", sAMAccountName, "esta directiva fue asignada: " + gp.Name);
+
                             }
                             catch (Exception e)
                             {
@@ -224,12 +227,12 @@ namespace RPAUserAdminOJT.Controllers.ActiveDirectory.Services
 
                                 if (accessMessage.Contains("Acceso denegado"))
                                 {
-                                    //Controllers.LogFiles.LogApplication.LogWrite("User AddGrp ==> " + "Usuario: " + sAMAccountName + ", esta directiva no se puede asignar: " + gp.Name);
+                                    LOGRobotica.Controllers.LogApplication.LogWrite("User AddGrp ==> " + "Usuario: " + sAMAccountName + ", esta directiva no se puede asignar: " + gp.Name);
                                     continue;
                                 }
                                 else if (accessMessage.Contains("Access denied."))
                                 {
-                                    //Controllers.LogFiles.LogApplication.LogWrite("User AddGrp ==> " + "Usuario: " + sAMAccountName + ", esta directiva no se puede asignar: " + gp.Name);
+                                    LOGRobotica.Controllers.LogApplication.LogWrite("User AddGrp ==> " + "Usuario: " + sAMAccountName + ", esta directiva no se puede asignar: " + gp.Name);
                                     continue;
                                 }
                                 else
@@ -265,15 +268,23 @@ namespace RPAUserAdminOJT.Controllers.ActiveDirectory.Services
 
         public static void User_Add_Group(string users, string baseUser)
         {
+            try
+            {
+                PrincipalContext principalContext = new PrincipalContext(ContextType.Domain, Models.GlobalVar.Domain, Models.GlobalVar.UserAdm, Models.GlobalVar.Passwrd);
+                ServicesProvider servicesProvider = new ServicesProvider(principalContext);
+                UserPrincipal user = Query.QueryProvider.Get(users);
+                List<Models.Group> lstGroups = Query.QueryProvider.GetGroups(baseUser);
+                servicesProvider.AddUserToGroup(users, lstGroups);
 
-            PrincipalContext principalContext = new PrincipalContext(ContextType.Domain, Models.GlobalVar.Domain, Models.GlobalVar.UserAdm, Models.GlobalVar.Passwrd);
-            ServicesProvider servicesProvider = new ServicesProvider(principalContext);
-            UserPrincipal user = Query.QueryProvider.Get(users);
-            List<Models.Group> lstGroups = Query.QueryProvider.GetGroups(baseUser);
-            servicesProvider.AddUserToGroup(users, lstGroups);
+                user.Dispose();
+                principalContext.Dispose();
 
-            user.Dispose();
-            principalContext.Dispose();
+            }
+            catch (Exception ex)
+            {
+                LOGRobotica.Controllers.LogApplication.LogWrite("User Add Group ==> " + "Error: " + ex.Message + ", imposible asignar directiva");
+            }
+           
 
         }
 
@@ -301,12 +312,6 @@ namespace RPAUserAdminOJT.Controllers.ActiveDirectory.Services
                 user.Dispose();
                 principalContext.Dispose();
 
-                //string MainConnectionPrefix = $"LDAP://{Models.GlobalVar.Domain}";
-                //string MoveConnectionPrefix = $"LDAP://{Models.GlobalVar.Domain},{Models.GlobalVar.Move}";
-
-                //DirectoryEntry MainldapLocation = new DirectoryEntry(MainConnectionPrefix);
-                //DirectoryEntry MoveldapLocation = new DirectoryEntry(MoveConnectionPrefix, Models.GlobalVar.UserAdm, Models.GlobalVar.Passwrd);
-
                 DirectoryEntry MainldapLocation = new DirectoryEntry("LDAP://" + distname, Models.GlobalVar.UserAdm, Models.GlobalVar.Passwrd);
                 DirectoryEntry MoveldapLocation = new DirectoryEntry("LDAP://" + "OU=Retiros,DC=multienlace,DC=com,DC=co", Models.GlobalVar.UserAdm, Models.GlobalVar.Passwrd);
 
@@ -315,11 +320,8 @@ namespace RPAUserAdminOJT.Controllers.ActiveDirectory.Services
                 MainldapLocation.Close();
                 MainldapLocation.Close();
 
-
-
-
-
                 LOGRobotica.Controllers.LogApplication.LogWrite("Disable Account ==> " + "Usuario: " + users + ", se ha deshabilitado");
+                Utility.FillExcel.WriteExcel("Disable Account", users, "se ha deshabilitado");
             }
             catch(Exception ex)
             {
@@ -341,6 +343,7 @@ namespace RPAUserAdminOJT.Controllers.ActiveDirectory.Services
                 principalContext.Dispose();
 
                 LOGRobotica.Controllers.LogApplication.LogWrite("Enable Account ==> " + "Usuario: " + users + ", se ha habilitado");
+                //Utility.FillExcel.WriteExcel("Enable Account", users, "se ha habilitado");
             }
             catch (Exception ex)
             {
