@@ -25,5 +25,7 @@ namespace RPAUserAdminOJT.Controllers.Models
 
         public static bool outLoadFile = false;
 
+        public static bool existUser = false;
+
     }
 }

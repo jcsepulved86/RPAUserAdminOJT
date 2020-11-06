@@ -8,7 +8,7 @@ namespace RPAUserAdminOJT.Controllers.Function
     {
         public static PrincipalContext principalContext = new PrincipalContext(ContextType.Domain, Models.GlobalVar.Domain, Models.GlobalVar.UserAdm, Models.GlobalVar.Passwrd);
 
-        public static void User(string FirstLastName, string SecondLastName, string GivenName, string MiddleName, string Domain, string HomePage, string Country, string State, string City, string PostOfficeBox, string SamAccountName, string Description, string Department, string Company, string UserBasement)
+        public static void User(string FirstLastName, string SecondLastName, string GivenName, string MiddleName, string Domain, string HomePage, string Country, string State, string City, string PostOfficeBox, string SamAccountName, string Description, string Department, string Company, string UserBasement, string DateModify, string NameBox, string EmailBox, string IdBox, string CodPRC, string client)
         {
             
             string result;
@@ -48,10 +48,11 @@ namespace RPAUserAdminOJT.Controllers.Function
 
                     if (Models.GlobalVar.accessEntires == false)
                     {
-                        MessageBox.Show("El usuario: " + Models.GlobalVar.UserAdm + ", no tiene permisos para modificar el Directorio Activo", "RPAKonecta - Alerta", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        //MessageBox.Show("El usuario: " + Models.GlobalVar.UserAdm + ", no tiene permisos para modificar el Directorio Activo", "RPAKonecta - Alerta", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                         LOGRobotica.Controllers.LogApplication.LogWrite("User Create ==> " + "El usuario: " + Models.GlobalVar.UserAdm + ", no tiene permisos para modificar el Directorio Activo");
                         //Utility.FillExcel.WriteExcel("User Create", Models.GlobalVar.UserAdm, "no tiene permisos para modificar el Directorio Activo");
                         Models.GlobalVar.outLoadFile = true;
+                        Models.GlobalVar.existUser = false;
 
                     }
                     else
@@ -59,14 +60,16 @@ namespace RPAUserAdminOJT.Controllers.Function
                         LOGRobotica.Controllers.LogApplication.LogWrite("User Create ==> " + "Usuario: " + user.SamAccountName + ", ya existe");
                         //Utility.FillExcel.WriteExcel("User Create", user.SamAccountName, "ya existe");
                         Models.GlobalVar.countNOProcess++;
+                        Models.GlobalVar.existUser = false;
                     }
 
                 }
                 else
                 {
                     LOGRobotica.Controllers.LogApplication.LogWrite("User Create ==> " + "Usuario: " + user.SamAccountName);
-                    Utility.FillExcel.WriteExcel("User Create", user.SamAccountName, Models.GlobalVar.passwordUser);
+                    Utility.FillExcel.WriteExcel("User Create", DateModify, NameBox, EmailBox, IdBox, GivenName + MiddleName + FirstLastName + SecondLastName, client,  CodPRC, user.SamAccountName, Models.GlobalVar.passwordUser);
                     Models.GlobalVar.countYESProcess++;
+                    Models.GlobalVar.existUser = true;
                 }
 
                 principalContext.Dispose();

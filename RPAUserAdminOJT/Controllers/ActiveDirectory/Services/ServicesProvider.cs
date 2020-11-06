@@ -321,7 +321,7 @@ namespace RPAUserAdminOJT.Controllers.ActiveDirectory.Services
                 MainldapLocation.Close();
 
                 LOGRobotica.Controllers.LogApplication.LogWrite("Disable Account ==> " + "Usuario: " + users + ", se ha deshabilitado");
-                Utility.FillExcel.WriteExcel("Disable Account", users, "se ha deshabilitado");
+                Utility.FillExcel.WriteExcel("Disable Account", users, "se ha deshabilitado", "", "", "", "","","","");
             }
             catch(Exception ex)
             {

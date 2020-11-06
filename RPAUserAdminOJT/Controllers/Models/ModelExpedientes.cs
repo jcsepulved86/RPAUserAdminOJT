@@ -19,6 +19,11 @@ namespace RPAUserAdminOJT.Controllers.Models
         public string tipo_estado { get; set; }
         public string id_dp_cargos { get; set; }
         public string nombre_cargo { get; set; }
+        public string documento_jefe { get; set; }
+        public string nombre_jefe { get; set; }
+        public string email_jefe { get; set; }
+        public string fecha_modificacion { get; set; }
+
 
         public static ArrayList candidatForma = new ArrayList();
         public static ArrayList candidatOJT = new ArrayList();

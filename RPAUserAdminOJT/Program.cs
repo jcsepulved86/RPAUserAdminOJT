@@ -32,6 +32,9 @@ namespace RPAUserAdminOJT.Controllers
             //ActiveDirectory.Services.ServicesProvider.EnableAccount(usrd);
             #endregion
 
+            //string usred = Controllers.ActiveDirectory.Services.ServicesProvider.UserNetwork("astrid.urrego.m");
+            //Function.Delete.User(usred);
+
             Initialize();
 
         }
@@ -50,6 +53,10 @@ namespace RPAUserAdminOJT.Controllers
             string nombre_completo = string.Empty;
             string nombre_pcrc = string.Empty;
             string tipo_estado = string.Empty;
+            string documento_jefe = string.Empty;
+            string nombre_jefe = string.Empty;
+            string email_jefe = string.Empty;
+            string fecha_modificacion = string.Empty;
 
             Models.GlobalVar.filePath = rootUBassemet;
 
@@ -97,6 +104,11 @@ namespace RPAUserAdminOJT.Controllers
                         nombre_completo = string.Empty;
                         nombre_pcrc = string.Empty;
                         tipo_estado = string.Empty;
+                        documento_jefe = string.Empty;
+                        nombre_jefe = string.Empty;
+                        email_jefe = string.Empty;
+                        fecha_modificacion = string.Empty;
+
 
                         if (exped[i].ceco == null)
                             ceco = "";
@@ -148,14 +160,34 @@ namespace RPAUserAdminOJT.Controllers
                         else
                             tipo_estado = exped[i].tipo_estado.ToString();
 
+                        if (exped[i].documento_jefe == null)
+                            documento_jefe = "";
+                        else
+                            documento_jefe = exped[i].documento_jefe.ToString();
+
+                        if (exped[i].nombre_jefe == null)
+                            nombre_jefe = "";
+                        else
+                            nombre_jefe = exped[i].nombre_jefe.ToString();
+
+                        if (exped[i].email_jefe == null)
+                            email_jefe = "";
+                        else
+                            email_jefe = exped[i].email_jefe.ToString();
+
+                        if (exped[i].fecha_modificacion == null)
+                            fecha_modificacion = "";
+                        else
+                            fecha_modificacion = exped[i].fecha_modificacion.ToString();
+
 
                         if (id_dp_estados == "309")
                         {
-                            Models.ModelExpedientes.candidatForma.Add(ceco + ";" + cod_pcrc + ";" + documento + ";" + id_dp_cargos + ";" + id_dp_estados + ";" + nombre_cargo + ";" + nombre_ceco + ";" + nombre_completo + ";" + nombre_pcrc + ";" + tipo_estado);
+                            Models.ModelExpedientes.candidatForma.Add(ceco + ";" + cod_pcrc + ";" + documento + ";" + id_dp_cargos + ";" + id_dp_estados + ";" + nombre_cargo + ";" + nombre_ceco + ";" + nombre_completo + ";" + nombre_pcrc + ";" + tipo_estado + ";" + documento_jefe + ";" + nombre_jefe + ";" + email_jefe + ";" + fecha_modificacion);
                         }
                         else if (id_dp_estados == "305" || id_dp_estados == "317" || id_dp_estados == "327")
                         {
-                            Models.ModelExpedientes.candidatRechz.Add(ceco + ";" + cod_pcrc + ";" + documento + ";" + id_dp_cargos + ";" + id_dp_estados + ";" + nombre_cargo + ";" + nombre_ceco + ";" + nombre_completo + ";" + nombre_pcrc + ";" + tipo_estado);
+                            Models.ModelExpedientes.candidatRechz.Add(ceco + ";" + cod_pcrc + ";" + documento + ";" + id_dp_cargos + ";" + id_dp_estados + ";" + nombre_cargo + ";" + nombre_ceco + ";" + nombre_completo + ";" + nombre_pcrc + ";" + tipo_estado + ";" + documento_jefe + ";" + nombre_jefe + ";" + email_jefe + ";" + fecha_modificacion);
                         }
 
                     }
@@ -164,7 +196,7 @@ namespace RPAUserAdminOJT.Controllers
                     Models.ModelExpedientes.candidatRechz.ToString();
 
                     ValidateFormaUsers();
-                    //ValidateRECHZUsers();
+                    ValidateRECHZUsers();
 
                 }
                 else
@@ -195,7 +227,7 @@ namespace RPAUserAdminOJT.Controllers
 
                     int yillFiles = SPLTforma.Length;
 
-                    if (yillFiles == 10)
+                    if (yillFiles == 14)
                     {
                         for (int j = 0; j < SPLTforma.Count(); j++)
                         {
@@ -239,26 +271,37 @@ namespace RPAUserAdminOJT.Controllers
                             employee.Domain = splBassment[5].ToString();
                             employee.Department = splBassment[6].ToString();
                             employee.Company = "Konecta";
+                            employee.fecha_modificacion = formaList[13].ToString();
+                            employee.nombre_jefe = formaList[11].ToString();
+                            employee.email_jefe = formaList[12].ToString();
+                            employee.documento_jefe = formaList[10].ToString();
+                            employee.codPCR = formaList[1].ToString();
+                            employee.cliente = formaList[8].ToString();
+
 
                             Function.Create.User(employee.FirstLastName, employee.SecondLastName,
                                             employee.GivenName, employee.MiddleName, employee.Domain,
                                             employee.HomePage, employee.Country, employee.State, employee.City, employee.PostOfficeBox, employee.SamAccountName,
-                                            employee.Description, employee.Department, employee.Company, employee.UserBasement);
+                                            employee.Description, employee.Department, employee.Company, employee.UserBasement, employee.fecha_modificacion, employee.nombre_jefe, employee.email_jefe, employee.documento_jefe, employee.codPCR, employee.cliente);
+                            //cedula nombre y apellido y cliente nombre pcr
 
+                            if (Models.GlobalVar.existUser != false)
+                            {
+                                if (employee.UserBasement != "pruebas.bot.1")
+                                {
+                                    ActiveDirectory.Services.ServicesProvider.User_Add_Group(employee.SamAccountName, employee.UserBasement);
+                                }
+                                else
+                                {
+                                    LOGRobotica.Controllers.LogApplication.LogWrite("Sin Usuario Base ==> " + "El usuario: " + usuarioRed + ", imposible asignarle grupo");
+                                }
 
-                            if (employee.UserBasement != "pruebas.bot.1")
-                            {
-                                ActiveDirectory.Services.ServicesProvider.User_Add_Group(employee.SamAccountName, employee.UserBasement);
+                                if (usuarioRed != "")
+                                {
+                                    ActiveDirectory.Services.ServicesProvider.EnableAccount(usuarioRed);
+                                }
                             }
-                            else
-                            {
-                                LOGRobotica.Controllers.LogApplication.LogWrite("Sin Usuario Base ==> " + "El usuario: " + usuarioRed + ", imposible asignarle grupo");
-                            }
-
-                            if (usuarioRed != "")
-                            {
-                                ActiveDirectory.Services.ServicesProvider.EnableAccount(usuarioRed);
-                            }
+                            
                         }
                         else
                         {
@@ -293,7 +336,7 @@ namespace RPAUserAdminOJT.Controllers
 
                 int yillFiles = SPLTRechz.Length;
 
-                if (yillFiles == 10)
+                if (yillFiles == 14)
                 {
                     for (int j = 0; j < SPLTRechz.Count(); j++)
                     {
@@ -313,7 +356,7 @@ namespace RPAUserAdminOJT.Controllers
                     else
                     {
                         LOGRobotica.Controllers.LogApplication.LogWrite("Validate Users - Type: " + RECHZList[9].ToString() +" ==> " + "State: " + RECHZList[4].ToString() + ", FullName: " + RECHZList[7].ToString() + ", no posee codigo PCRC");
-                        Utility.FillExcel.WriteExcel("Retreat Users", RECHZList[7].ToString(), "no posee codigo PCRC");
+                        //Utility.FillExcel.WriteExcel("Retreat Users", RECHZList[7].ToString(), "no posee codigo PCRC", "", "", "", "",);
                     }
 
                 }
@@ -440,95 +483,95 @@ namespace RPAUserAdminOJT.Controllers
         #endregion
 
         #region HIDDEN LOGIC OJT
-        public static void ValidateOJTUsers()
-        {
+        //public static void ValidateOJTUsers()
+        //{
 
-            try
-            {
-                Models.Employee employee = new Models.Employee();
+        //    try
+        //    {
+        //        Models.Employee employee = new Models.Employee();
 
-                ArrayList OJTList = new ArrayList();
-                string resultOJT = string.Empty;
+        //        ArrayList OJTList = new ArrayList();
+        //        string resultOJT = string.Empty;
 
-                for (int i = 2; i < Models.ModelExpedientes.candidatOJT.Count; i++)
-                {
-                    string forma = Models.ModelExpedientes.candidatOJT[i].ToString();
-                    string[] SPLTforma = forma.Split(';');
+        //        for (int i = 2; i < Models.ModelExpedientes.candidatOJT.Count; i++)
+        //        {
+        //            string forma = Models.ModelExpedientes.candidatOJT[i].ToString();
+        //            string[] SPLTforma = forma.Split(';');
 
-                    int yillFiles = SPLTforma.Length;
+        //            int yillFiles = SPLTforma.Length;
 
-                    if (yillFiles == 10)
-                    {
-                        for (int j = 0; j < SPLTforma.Count(); j++)
-                        {
-                            resultOJT = SPLTforma[j].ToString();
-                            OJTList.Add(resultOJT);
-                        }
-                        OJTList.ToString();
+        //            if (yillFiles == 10)
+        //            {
+        //                for (int j = 0; j < SPLTforma.Count(); j++)
+        //                {
+        //                    resultOJT = SPLTforma[j].ToString();
+        //                    OJTList.Add(resultOJT);
+        //                }
+        //                OJTList.ToString();
 
-                        string usrd = Function.Delete.Cedula(OJTList[2].ToString());
+        //                string usrd = Function.Delete.Cedula(OJTList[2].ToString());
 
-                        if (usrd != "")
-                        {
-                            //Function.Delete.User(usrd);
-                        }
+        //                if (usrd != "")
+        //                {
+        //                    //Function.Delete.User(usrd);
+        //                }
 
-                        string nombre = OJTList[7].ToString();
+        //                string nombre = OJTList[7].ToString();
 
-                        string usuarioRed = NetworkAccountName(nombre, 1);
+        //                string usuarioRed = NetworkAccountName(nombre, 1);
 
-                        employee.SamAccountName = usuarioRed;
-                        employee.GivenName = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(firstNAME);
-                        employee.MiddleName = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(secondNAME);
-                        employee.FirstLastName = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(lastNAME);
-                        employee.SecondLastName = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(secondlastNAME);
-                        employee.PostOfficeBox = OJTList[2].ToString();
-                        if (OJTList[1].ToString() == "0")
-                        {
-                            //employee.UserBasement = "pruebas.bot.1";
-                            //LOG DE NO SE ENCONTRO USUARIO BASE
-                        }
-                        else
-                        {
-                            employee.UserBasement = DCTbassement[OJTList[1].ToString()];
-                        }
-                        employee.TicketID = "";
-                        employee.HomePage = "allus.com.co";
-                        employee.City = "Medellin";
-                        employee.State = "Antioquia";
-                        employee.Country = "Colombia";
-                        employee.Description = OJTList[6].ToString();
-                        employee.Domain = "multienlace.com.co";
-                        employee.Department = "Interno";
-                        employee.Company = "Konecta";
+        //                employee.SamAccountName = usuarioRed;
+        //                employee.GivenName = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(firstNAME);
+        //                employee.MiddleName = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(secondNAME);
+        //                employee.FirstLastName = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(lastNAME);
+        //                employee.SecondLastName = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(secondlastNAME);
+        //                employee.PostOfficeBox = OJTList[2].ToString();
+        //                if (OJTList[1].ToString() == "0")
+        //                {
+        //                    //employee.UserBasement = "pruebas.bot.1";
+        //                    //LOG DE NO SE ENCONTRO USUARIO BASE
+        //                }
+        //                else
+        //                {
+        //                    employee.UserBasement = DCTbassement[OJTList[1].ToString()];
+        //                }
+        //                employee.TicketID = "";
+        //                employee.HomePage = "allus.com.co";
+        //                employee.City = "Medellin";
+        //                employee.State = "Antioquia";
+        //                employee.Country = "Colombia";
+        //                employee.Description = OJTList[6].ToString();
+        //                employee.Domain = "multienlace.com.co";
+        //                employee.Department = "Interno";
+        //                employee.Company = "Konecta";
 
-                        Function.Create.User(employee.FirstLastName, employee.SecondLastName,
-                                        employee.GivenName, employee.MiddleName, employee.Domain,
-                                        employee.HomePage, employee.Country, employee.State, employee.City, employee.PostOfficeBox, employee.SamAccountName,
-                                        employee.Description, employee.Department, employee.Company, employee.UserBasement);
-
-
-                        if (employee.UserBasement != "pruebas.bot.1")
-                        {
-                            ActiveDirectory.Services.ServicesProvider.User_Add_Group(employee.SamAccountName, employee.UserBasement);
-                        }
-                        else
-                        {
-                            ///LOG ERROR sin usuario base
-                        }
+        //                Function.Create.User(employee.FirstLastName, employee.SecondLastName,
+        //                                employee.GivenName, employee.MiddleName, employee.Domain,
+        //                                employee.HomePage, employee.Country, employee.State, employee.City, employee.PostOfficeBox, employee.SamAccountName,
+        //                                employee.Description, employee.Department, employee.Company, employee.UserBasement);
 
 
-                    }
+        //                if (employee.UserBasement != "pruebas.bot.1")
+        //                {
+        //                    ActiveDirectory.Services.ServicesProvider.User_Add_Group(employee.SamAccountName, employee.UserBasement);
+        //                }
+        //                else
+        //                {
+        //                    ///LOG ERROR sin usuario base
+        //                }
 
-                    OJTList.Clear();
-                }
-            }
-            catch (Exception ex)
-            {
-                LOGRobotica.Controllers.LogApplication.LogWrite("ValidateOJTUsers ==> " + "Exception: " + ex.Message.ToString());
-            }
 
-        }
+        //            }
+
+        //            OJTList.Clear();
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        LOGRobotica.Controllers.LogApplication.LogWrite("ValidateOJTUsers ==> " + "Exception: " + ex.Message.ToString());
+        //    }
+
+        //}
         #endregion
 
     }

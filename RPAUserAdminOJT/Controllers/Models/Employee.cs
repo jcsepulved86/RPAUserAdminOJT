@@ -18,5 +18,12 @@
         public string Domain { get; set; }
         public string Department { get; set; }
         public string Company { get; set; }
+        public string documento_jefe { get; set; }
+        public string nombre_jefe { get; set; }
+        public string email_jefe { get; set; }
+        public string fecha_modificacion { get; set; }
+        public string codPCR { get; set; }
+        public string cliente { get; set; }
+
     }
 }
