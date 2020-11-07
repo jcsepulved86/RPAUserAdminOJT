@@ -23,14 +23,10 @@ namespace RPAUserAdminOJT.Controllers.ActiveDirectory.Services
             this.MainQueryProvider = new Query.QueryProvider(principalContext);
         }
 
-        /// <summary>
-        /// Crea un nuevo usuario en el AD
-        /// </summary>
-        /// <param name="user">Objecto de tipo ADuser</param>
         public bool Create(Models.AdUser user)
         {
             try
-            {   // Valida que el usuario no exista
+            {
                 if (!Query.QueryProvider.Exist(user.SamAccountName))
                 {
 
@@ -217,7 +213,7 @@ namespace RPAUserAdminOJT.Controllers.ActiveDirectory.Services
                                 gp.Members.Add(principalContext, IdentityType.SamAccountName, sAMAccountName);
                                 gp.Save();
 
-                                LOGRobotica.Controllers.LogApplication.LogWrite("User AddGrp ==> " + "Usuario: " + sAMAccountName + ", esta directiva fue asignada: " + gp.Name);
+                                Utility.LogApplication.LogWrite("User AddGrp ==> " + "Usuario: " + sAMAccountName + ", esta directiva fue asignada: " + gp.Name);
                                 //Utility.FillExcel.WriteExcel("User Add Group", sAMAccountName, "esta directiva fue asignada: " + gp.Name);
 
                             }
@@ -227,12 +223,12 @@ namespace RPAUserAdminOJT.Controllers.ActiveDirectory.Services
 
                                 if (accessMessage.Contains("Acceso denegado"))
                                 {
-                                    LOGRobotica.Controllers.LogApplication.LogWrite("User AddGrp ==> " + "Usuario: " + sAMAccountName + ", esta directiva no se puede asignar: " + gp.Name);
+                                    Utility.LogApplication.LogWrite("User AddGrp ==> " + "Usuario: " + sAMAccountName + ", esta directiva no se puede asignar: " + gp.Name);
                                     continue;
                                 }
                                 else if (accessMessage.Contains("Access denied."))
                                 {
-                                    LOGRobotica.Controllers.LogApplication.LogWrite("User AddGrp ==> " + "Usuario: " + sAMAccountName + ", esta directiva no se puede asignar: " + gp.Name);
+                                    Utility.LogApplication.LogWrite("User AddGrp ==> " + "Usuario: " + sAMAccountName + ", esta directiva no se puede asignar: " + gp.Name);
                                     continue;
                                 }
                                 else
@@ -282,7 +278,7 @@ namespace RPAUserAdminOJT.Controllers.ActiveDirectory.Services
             }
             catch (Exception ex)
             {
-                LOGRobotica.Controllers.LogApplication.LogWrite("User Add Group ==> " + "Error: " + ex.Message + ", imposible asignar directiva");
+                Utility.LogApplication.LogWrite("User Add Group ==> " + "Error: " + ex.Message + ", imposible asignar directiva");
             }
            
 
@@ -320,12 +316,13 @@ namespace RPAUserAdminOJT.Controllers.ActiveDirectory.Services
                 MainldapLocation.Close();
                 MainldapLocation.Close();
 
-                LOGRobotica.Controllers.LogApplication.LogWrite("Disable Account ==> " + "Usuario: " + users + ", se ha deshabilitado");
-                Utility.FillExcel.WriteExcel("Disable Account", users, "se ha deshabilitado", "", "", "", "","","","");
+                Utility.LogApplication.LogWrite("Disable Account ==> " + "Usuario: " + users + ", se ha deshabilitado");
+                Utility.FillExcel.WriteExcel("Disable Account", users, "se ha deshabilitado");
+                
             }
             catch(Exception ex)
             {
-                LOGRobotica.Controllers.LogApplication.LogWrite("Disable Account ==> " + "Error: " + ex.Message + ", imposible en deshabilitarlo");
+                Utility.LogApplication.LogWrite("Disable Account ==> " + "Error: " + ex.Message + ", imposible en deshabilitarlo");
             }
 
         }
@@ -342,12 +339,11 @@ namespace RPAUserAdminOJT.Controllers.ActiveDirectory.Services
                 user.Dispose();
                 principalContext.Dispose();
 
-                LOGRobotica.Controllers.LogApplication.LogWrite("Enable Account ==> " + "Usuario: " + users + ", se ha habilitado");
-                //Utility.FillExcel.WriteExcel("Enable Account", users, "se ha habilitado");
+                Utility.LogApplication.LogWrite("Enable Account ==> " + "Usuario: " + users + ", se ha habilitado");
             }
             catch (Exception ex)
             {
-                LOGRobotica.Controllers.LogApplication.LogWrite("Enable Account ==> " + "Error: " + ex.Message + ", imposible en habilitarlo");
+                Utility.LogApplication.LogWrite("Enable Account ==> " + "Error: " + ex.Message + ", imposible en habilitarlo");
             }
         }
 

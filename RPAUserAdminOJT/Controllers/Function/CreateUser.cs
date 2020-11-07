@@ -49,7 +49,7 @@ namespace RPAUserAdminOJT.Controllers.Function
                     if (Models.GlobalVar.accessEntires == false)
                     {
                         //MessageBox.Show("El usuario: " + Models.GlobalVar.UserAdm + ", no tiene permisos para modificar el Directorio Activo", "RPAKonecta - Alerta", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                        LOGRobotica.Controllers.LogApplication.LogWrite("User Create ==> " + "El usuario: " + Models.GlobalVar.UserAdm + ", no tiene permisos para modificar el Directorio Activo");
+                        Utility.LogApplication.LogWrite("User Create ==> " + "El usuario: " + Models.GlobalVar.UserAdm + ", no tiene permisos para modificar el Directorio Activo");
                         //Utility.FillExcel.WriteExcel("User Create", Models.GlobalVar.UserAdm, "no tiene permisos para modificar el Directorio Activo");
                         Models.GlobalVar.outLoadFile = true;
                         Models.GlobalVar.existUser = false;
@@ -57,7 +57,7 @@ namespace RPAUserAdminOJT.Controllers.Function
                     }
                     else
                     {
-                        LOGRobotica.Controllers.LogApplication.LogWrite("User Create ==> " + "Usuario: " + user.SamAccountName + ", ya existe");
+                        Utility.LogApplication.LogWrite("User Create ==> " + "Usuario: " + user.SamAccountName + ", ya existe");
                         //Utility.FillExcel.WriteExcel("User Create", user.SamAccountName, "ya existe");
                         Models.GlobalVar.countNOProcess++;
                         Models.GlobalVar.existUser = false;
@@ -66,7 +66,7 @@ namespace RPAUserAdminOJT.Controllers.Function
                 }
                 else
                 {
-                    LOGRobotica.Controllers.LogApplication.LogWrite("User Create ==> " + "Usuario: " + user.SamAccountName);
+                    Utility.LogApplication.LogWrite("User Create ==> " + "Usuario: " + user.SamAccountName);
                     Utility.FillExcel.WriteExcel("User Create", DateModify, NameBox, EmailBox, IdBox, GivenName + MiddleName + FirstLastName + SecondLastName, client,  CodPRC, user.SamAccountName, Models.GlobalVar.passwordUser);
                     Models.GlobalVar.countYESProcess++;
                     Models.GlobalVar.existUser = true;

@@ -19,7 +19,7 @@ namespace RPAUserAdminOJT.Controllers.Utility
         #endregion
 
         #region Read Each Line of Writing an Excel
-        public static void WriteExcel(string Action, string DateModify, string NameBox, string EmailBox, string IdBox, string FullName, string client, string CodPCR, string Operation, string Result)
+        public static void WriteExcel(string Action, string DateModify = "", string NameBox = "", string EmailBox = "", string IdBox = "", string FullName = "", string client = "", string CodPCR = "", string Operation = "", string Result = "")
         {
             try
             {
@@ -28,9 +28,7 @@ namespace RPAUserAdminOJT.Controllers.Utility
 
                 CreateDirectory();
 
-                DateTime time = DateTime.Now;
-                String today;
-                today = time.ToString("ddMMyyyy");
+                string timeLogs = Models.GlobalVar.TimeLogs.ToString("ddMMyyyy_Hmm");
 
                 StringBuilder sbOutput = new StringBuilder();
 
@@ -40,11 +38,11 @@ namespace RPAUserAdminOJT.Controllers.Utility
 
                 sbOutput.AppendLine(string.Join(",", inaOutput[0]));
 
-                File.AppendAllText(DirectoryCSV + "\\" + NameRPA + "_" + today + "_" + Environment.UserName + ".csv", sbOutput.ToString());
+                File.AppendAllText(DirectoryCSV + "\\" + NameRPA + "_" + timeLogs + "_" + Environment.UserName + ".csv", sbOutput.ToString());
             }
             catch (Exception ex)
             {
-                LOGRobotica.Controllers.LogApplication.LogWrite("WriteExcel ==> " + "Exception: " + ex.Message.ToString());
+                Utility.LogApplication.LogWrite("WriteCsv ==> " + "Exception: " + ex.Message.ToString());
             }
 
             
