@@ -7,6 +7,8 @@ using System.DirectoryServices.AccountManagement;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Text;
+using System.Text.RegularExpressions;
 using System.Windows.Forms;
 #endregion
 
@@ -28,9 +30,47 @@ namespace RPAUserAdminOJT.Controllers
         #region MAIN ACTIVITIES
         public static void Main(string[] args)
         {
+            #region HIDDEN
+            //Function.Delete.User("liliana.mejia");
+            //Function.Delete.User("anngy.campino");
+            //Function.Delete.User("maria.ramirez.z");
+            //Function.Delete.User("sara.vera");
+            //Function.Delete.User("maria.carmona.z");
+            //Function.Delete.User("liliana.franco");
+            //Function.Delete.User("natacha.pavas");
+            //Function.Delete.User("tatiana.hincapie");
+            //Function.Delete.User("mariana.mendez");
+            //Function.Delete.User("maria.oquendo.a");
+            //Function.Delete.User("jhon.ardila");
+            //Function.Delete.User("jessica.morales");
+            //Function.Delete.User("yicela.perez");
+            //Function.Delete.User("manuela.medina");
+            //Function.Delete.User("luisa.echavarria");
+            //Function.Delete.User("blanca.vargas");
+            //Function.Delete.User("lizeth.quintana");
+            //Function.Delete.User("linda.rodriguez");
+            //Function.Delete.User("jhon.alvarez");
+            //Function.Delete.User("jonathan.yepes");
+            //Function.Delete.User("juliana.orrego");
+            //Function.Delete.User("lizeth.oquendo");
+            //Function.Delete.User("carolina.andrea");
+            //Function.Delete.User("sara.hurtado");
+            //Function.Delete.User("vanessa.alvarez");
+            //Function.Delete.User("angela.palacios");
+            //Function.Delete.User("tomas.gutierrez");
+            //Function.Delete.User("alejandro.valencia");
+            //Function.Delete.User("ana.rico");
+            //Function.Delete.User("david.chica");
+            //Function.Delete.User("julieth.cuadros");
+            //Function.Delete.User("luz.moreno");
+            //Function.Delete.User("katerine.bolivar");
+            //Function.Delete.User("jisell.arango");
+            #endregion
+
             LOGRobotica.Controllers.LogWebServices.logsWS(TiempoInicial, GUID, "Inicia proceso de Creacion de Usuario OJT", "Consulta Exitosa");
             Initialize();
             LOGRobotica.Controllers.LogWebServices.logsWS(TiempoInicial, GUID, "Finaliza proceso de Creacion de Usuario OJT", "Consulta Exitosa", "Creados", Models.GlobalVar.countYESProcess.ToString(), "NoCreados", Models.GlobalVar.countNOProcess.ToString(), "", "Deshabilitado", Models.GlobalVar.CountDeshabilitadoYESProcess.ToString(), "NoDeshabilitado", Models.GlobalVar.CountDeshabilitadoNOProcess.ToString());
+
         }
         #endregion
 
@@ -270,27 +310,40 @@ namespace RPAUserAdminOJT.Controllers
                             employee.codPCR = formaList[1].ToString();
                             employee.cliente = formaList[8].ToString();
 
-                            Function.Create.User(employee.FirstLastName, employee.SecondLastName,
-                                            employee.GivenName, employee.MiddleName, employee.Domain,
-                                            employee.HomePage, employee.Country, employee.State, employee.City, employee.PostOfficeBox, employee.SamAccountName,
-                                            employee.Description, employee.Department, employee.Company, employee.UserBasement, employee.fecha_modificacion, employee.nombre_jefe, employee.email_jefe, employee.documento_jefe, employee.codPCR, employee.cliente);
 
-                            if (Models.GlobalVar.existUser != false)
+                            string usred = Controllers.ActiveDirectory.Services.ServicesProvider.UserNetwork(formaList[2].ToString());
+
+                            if (usred == "")
                             {
-                                if (employee.UserBasement != "pruebas.bot.1")
+                                Function.Create.User(employee.FirstLastName, employee.SecondLastName,
+                                        employee.GivenName, employee.MiddleName, employee.Domain,
+                                        employee.HomePage, employee.Country, employee.State, employee.City, employee.PostOfficeBox, employee.SamAccountName,
+                                        employee.Description, employee.Department, employee.Company, employee.UserBasement, employee.fecha_modificacion, employee.nombre_jefe, employee.email_jefe, employee.documento_jefe, employee.codPCR, employee.cliente);
+
+                                if (Models.GlobalVar.existUser != false)
                                 {
-                                    ActiveDirectory.Services.ServicesProvider.User_Add_Group(employee.SamAccountName, employee.UserBasement);
-                                }
-                                else
-                                {
-                                    Utility.LogApplication.LogWrite("Sin Usuario Base ==> " + "El usuario: " + usuarioRed + ", imposible asignarle grupo");
+                                    if (employee.UserBasement != "pruebas.bot.1")
+                                    {
+                                        ActiveDirectory.Services.ServicesProvider.User_Add_Group(employee.SamAccountName, employee.UserBasement);
+                                    }
+                                    else
+                                    {
+                                        Utility.LogApplication.LogWrite("Sin Usuario Base ==> " + "El usuario: " + usuarioRed + ", imposible asignarle grupo");
+                                    }
+
+                                    if (usuarioRed != "")
+                                    {
+                                        ActiveDirectory.Services.ServicesProvider.EnableAccount(usuarioRed);
+                                    }
                                 }
 
-                                if (usuarioRed != "")
-                                {
-                                    ActiveDirectory.Services.ServicesProvider.EnableAccount(usuarioRed);
-                                }
                             }
+                            else
+                            {
+                                Utility.LogApplication.LogWrite("ValidateFormaUsers ==> " + "El nombre: " + usred + ", ya existe en la organizacion");
+                                Utility.FillExcel.WriteExcel("User No Create", employee.fecha_modificacion, employee.nombre_jefe, employee.email_jefe, employee.documento_jefe, employee.codPCR, employee.cliente, employee.UserBasement, usred, formaList[2].ToString());
+                            }
+                           
                         }
                         else
                         {
@@ -354,24 +407,51 @@ namespace RPAUserAdminOJT.Controllers
         public static string NetworkAccountName(string REDUser, int vState)
         {
             string validAccountName = string.Empty;
+            Regex reg = new Regex("[^a-zA-Z0-9 ]");
 
             try
             {
                 string[] SPLName = REDUser.Split(' ');
 
+
                 if (vState == 0)
                 {
                     firstNAME = SPLName[0].ToString().ToLower();
+                    string firstNormalizado = firstNAME.Normalize(NormalizationForm.FormD);
+                    firstNAME = reg.Replace(firstNormalizado, "");
+
                     secondNAME = SPLName[1].ToString().ToLower();
+                    string secondNormalizado = secondNAME.Normalize(NormalizationForm.FormD);
+                    secondNAME = reg.Replace(secondNormalizado, "");
+
                     lastNAME = SPLName[2].ToString().ToLower();
+                    string thirdNormalizado = lastNAME.Normalize(NormalizationForm.FormD);
+                    lastNAME = reg.Replace(thirdNormalizado, "");
+
                     secondlastNAME = SPLName[3].ToString().ToLower();
+                    string quarterNormalizado = secondlastNAME.Normalize(NormalizationForm.FormD);
+                    secondlastNAME = reg.Replace(quarterNormalizado, "");
+
                 }
                 else
                 {
+
                     firstNAME = SPLName[2].ToString().ToLower();
+                    string firstNormalizado = firstNAME.Normalize(NormalizationForm.FormD);
+                    firstNAME = reg.Replace(firstNormalizado, "");
+
                     secondNAME = SPLName[3].ToString().ToLower();
+                    string secondNormalizado = secondNAME.Normalize(NormalizationForm.FormD);
+                    secondNAME = reg.Replace(secondNormalizado, "");
+
                     lastNAME = SPLName[0].ToString().ToLower();
+                    string thirdNormalizado = lastNAME.Normalize(NormalizationForm.FormD);
+                    lastNAME = reg.Replace(thirdNormalizado, "");
+
                     secondlastNAME = SPLName[1].ToString().ToLower();
+                    string quarterNormalizado = secondlastNAME.Normalize(NormalizationForm.FormD);
+                    secondlastNAME = reg.Replace(quarterNormalizado, "");
+
                 }
                 
                 bool flag = false;

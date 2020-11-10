@@ -89,14 +89,27 @@ namespace RPAUserAdminOJT.Controllers.ActiveDirectory.Services
             string CrtMessage = string.Empty;
 
             try
-            {   // Valida que el usuario no exista
+            {
+
+                // Valida que el usuario no exista
                 if (!Query.QueryProvider.Exist(user.SamAccountName))
                 {
 
                     string oGUID = string.Empty;
                     string connectionPrefix = $"LDAP://{user.DistinguishedName}";
-                    DirectoryEntry dirEntry = new DirectoryEntry(connectionPrefix, principalContext.UserName, password);
-                    DirectoryEntry newUser;
+                    //DirectoryEntry dirEntry = new DirectoryEntry(connectionPrefix, principalContext.UserName, password);
+                    //DirectoryEntry newUser;
+
+                    //string connectionPrefix = $"LDAP://{Models.GlobalVar.Domain}";
+
+                    DirectoryEntry dirEntry = new DirectoryEntry(connectionPrefix, Models.GlobalVar.UserAdm, Models.GlobalVar.Passwrd);
+
+                    dirEntry.Path = connectionPrefix;
+                    dirEntry.AuthenticationType = AuthenticationTypes.Secure;
+
+                    DirectoryEntry newUser = dirEntry;
+
+
                     // Valida que el Nombre para mostrar no exista
                     string tempDn = $"CN={user.GetFullName()},{user.DistinguishedName}";
                     var u = Query.QueryProvider.Get(tempDn);
@@ -132,10 +145,13 @@ namespace RPAUserAdminOJT.Controllers.ActiveDirectory.Services
 
                     if (enabled)
                     {
-                        EnableAccount(newUser);  // Habilita la cuenta
+                        EnableAccount(newUser);
                     }
                     newUser.CommitChanges();
+
+                    dirEntry.Dispose();
                     dirEntry.Close();
+                    newUser.Dispose();
                     newUser.Close();
 
                     Models.GlobalVar.accessEntires = true;
@@ -174,6 +190,8 @@ namespace RPAUserAdminOJT.Controllers.ActiveDirectory.Services
         /// <param name="groups">Listado de grupos</param>
         public void AddUserToGroup(string sAMAccountName, List<Models.Group> groups)
         {
+            PrincipalContext principalContext = new PrincipalContext(ContextType.Domain, Models.GlobalVar.Domain, Models.GlobalVar.UserAdm, Models.GlobalVar.Passwrd);
+
             string groupAcces = string.Empty;
             string accessMessage = string.Empty;
             bool varaxu = false;

@@ -19,7 +19,7 @@ namespace RPAUserAdminOJT.Controllers.Utility
         #endregion
 
         #region Read Each Line of Writing an Excel
-        public static void WriteExcel(string Action, string DateModify = "", string NameBox = "", string EmailBox = "", string IdBox = "", string FullName = "", string client = "", string CodPCR = "", string Operation = "", string Result = "")
+        public static void WriteExcel(string Action, string DateModify = "", string NameBox = "", string EmailBox = "", string IdBox = "", string FullName = "", string client = "", string CodPCR = "", string Operation = "", string Result = "", string Bassement = "")
         {
             try
             {
