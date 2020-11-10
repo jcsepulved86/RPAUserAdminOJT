@@ -33,7 +33,7 @@ namespace RPAUserAdminOJT.Controllers.Utility
                 StringBuilder sbOutput = new StringBuilder();
 
                 string[][] inaOutput = new string[][]{
-                new string[]{ DateTime.Now.ToLocalTime().ToString(), Environment.MachineName, Environment.UserName, Action, DateModify, NameBox, EmailBox, IdBox, FullName, client, CodPCR, Operation, Result }
+                new string[]{ DateTime.Now.ToLocalTime().ToString(), Environment.MachineName, Environment.UserName, Action, DateModify, NameBox, EmailBox, IdBox, FullName, client, CodPCR, Operation, Result, Bassement }
                 };
 
                 sbOutput.AppendLine(string.Join(",", inaOutput[0]));

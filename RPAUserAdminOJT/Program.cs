@@ -31,6 +31,7 @@ namespace RPAUserAdminOJT.Controllers
         public static void Main(string[] args)
         {
             #region HIDDEN
+            //Function.Delete.User("maria.gutierrez"); 
             //Function.Delete.User("liliana.mejia");
             //Function.Delete.User("anngy.campino");
             //Function.Delete.User("maria.ramirez.z");
