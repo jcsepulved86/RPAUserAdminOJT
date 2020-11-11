@@ -31,6 +31,8 @@ namespace RPAUserAdminOJT.Controllers
         public static void Main(string[] args)
         {
             #region HIDDEN
+            //Function.Delete.User("yesica.pineda.s");
+            //Function.Delete.User("martha.mosquera");
             //Function.Delete.User("maria.gutierrez"); 
             //Function.Delete.User("liliana.mejia");
             //Function.Delete.User("anngy.campino");
@@ -272,10 +274,23 @@ namespace RPAUserAdminOJT.Controllers
 
                         string nombre = formaList[7].ToString();
                         string usuarioRed = string.Empty;
+                        string dictionaryArray = string.Empty;
+                        string[] splBassment;
+
                         if (formaList[1].ToString() != "0")
                         {
-                            string dictionaryArray = DCTbassement[formaList[1].ToString()];
-                            string[] splBassment = dictionaryArray.Split(';');
+                            try
+                            {
+                                dictionaryArray = DCTbassement[formaList[1].ToString()];
+                                splBassment = dictionaryArray.Split(';');
+                            }
+                            catch(Exception)
+                            {
+                                Utility.LogApplication.LogWrite("ValidateFormaUsers ==> " + "El nombre: " + formaList[7].ToString() + ", no se encuentra codigo PCRC: " + formaList[1].ToString() + ", en la lista de usuarios base");
+                                formaList.Clear();
+                                continue;
+                            }
+                            
                             usuarioRed = NetworkAccountName(nombre, 0);
 
                             employee.SamAccountName = usuarioRed;
@@ -342,7 +357,7 @@ namespace RPAUserAdminOJT.Controllers
                             else
                             {
                                 Utility.LogApplication.LogWrite("ValidateFormaUsers ==> " + "El nombre: " + usred + ", ya existe en la organizacion");
-                                Utility.FillExcel.WriteExcel("User No Create", employee.fecha_modificacion, employee.nombre_jefe, employee.email_jefe, employee.documento_jefe, employee.codPCR, employee.cliente, employee.UserBasement, usred, formaList[2].ToString());
+                                Utility.FillExcel.WriteExcel("User No Create", employee.fecha_modificacion, employee.nombre_jefe, employee.email_jefe, employee.documento_jefe, formaList[7].ToString(), formaList[2].ToString(), employee.cliente, employee.codPCR, employee.UserBasement );
                             }
                            
                         }

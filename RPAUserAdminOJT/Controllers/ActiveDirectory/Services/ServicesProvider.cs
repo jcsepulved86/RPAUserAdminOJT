@@ -298,7 +298,6 @@ namespace RPAUserAdminOJT.Controllers.ActiveDirectory.Services
             {
                 Utility.LogApplication.LogWrite("User Add Group ==> " + "Error: " + ex.Message + ", imposible asignar directiva");
             }
-           
 
         }
 
@@ -335,8 +334,8 @@ namespace RPAUserAdminOJT.Controllers.ActiveDirectory.Services
                 MainldapLocation.Close();
 
                 Utility.LogApplication.LogWrite("Disable Account ==> " + "Usuario: " + users + ", se ha deshabilitado");
-                Utility.FillExcel.WriteExcel("Disable Account", users, "se ha deshabilitado");
-                
+                Utility.FillExcel.WriteExcel("Disable Account", "", "", "", "", "", "", "", "", "", users, "se ha deshabilitado");
+
             }
             catch(Exception ex)
             {

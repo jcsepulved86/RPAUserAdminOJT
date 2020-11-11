@@ -23,6 +23,7 @@ namespace RPAUserAdminOJT.Controllers.Models
         public static bool outLoadFile = false;
         public static bool existUser = false;
         public static DateTime TimeLogs = DateTime.Now;
+        public static bool validTittle = true;
 
     }
 }

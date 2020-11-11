@@ -67,7 +67,7 @@ namespace RPAUserAdminOJT.Controllers.Function
                 else
                 {
                     Utility.LogApplication.LogWrite("User Create ==> " + "Usuario: " + user.SamAccountName);
-                    Utility.FillExcel.WriteExcel("User Create", DateModify, NameBox, EmailBox, IdBox, GivenName + MiddleName + FirstLastName + SecondLastName, client,  CodPRC, UserBasement, user.SamAccountName, Models.GlobalVar.passwordUser);
+                    Utility.FillExcel.WriteExcel("User Create", DateModify, NameBox, EmailBox, IdBox, GivenName + " " + MiddleName + " " + FirstLastName + " " + SecondLastName, PostOfficeBox, client,  CodPRC, UserBasement, user.SamAccountName, Models.GlobalVar.passwordUser);
                     Models.GlobalVar.countYESProcess++;
                     Models.GlobalVar.existUser = true;
                 }
