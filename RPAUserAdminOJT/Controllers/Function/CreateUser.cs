@@ -8,7 +8,7 @@ namespace RPAUserAdminOJT.Controllers.Function
     {
         public static PrincipalContext principalContext = new PrincipalContext(ContextType.Domain, Models.GlobalVar.Domain, Models.GlobalVar.UserAdm, Models.GlobalVar.Passwrd);
 
-        public static void User(string FirstLastName, string SecondLastName, string GivenName, string MiddleName, string Domain, string HomePage, string Country, string State, string City, string PostOfficeBox, string SamAccountName, string Description, string Department, string Company, string UserBasement, string DateModify, string NameBox, string EmailBox, string IdBox, string CodPRC, string client)
+        public static void User(string FirstLastName, string SecondLastName, string GivenName, string MiddleName, string Domain, string HomePage, string Country, string State, string City, string PostOfficeBox, string SamAccountName, string Description, string Department, string Company, string UserBasement, string DateModify, string NameBox, string EmailBox, string IdBox, string CodPRC, string client, string NumLote)
         {
             
             string result;
@@ -67,7 +67,7 @@ namespace RPAUserAdminOJT.Controllers.Function
                 else
                 {
                     Utility.LogApplication.LogWrite("User Create ==> " + "Usuario: " + user.SamAccountName);
-                    Utility.FillExcel.WriteExcel("User Create", DateModify, NameBox, EmailBox, IdBox, GivenName + " " + MiddleName + " " + FirstLastName + " " + SecondLastName, PostOfficeBox, client,  CodPRC, UserBasement, user.SamAccountName, Models.GlobalVar.passwordUser);
+                    Utility.FillExcel.WriteExcel("User Create", DateModify, NumLote, NameBox, EmailBox, IdBox, GivenName + " " + MiddleName + " " + FirstLastName + " " + SecondLastName, PostOfficeBox, client,  CodPRC, UserBasement, user.SamAccountName, Models.GlobalVar.passwordUser);
                     Models.GlobalVar.countYESProcess++;
                     Models.GlobalVar.existUser = true;
                 }

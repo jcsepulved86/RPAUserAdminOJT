@@ -33,6 +33,7 @@ namespace RPAUserAdminOJT.Controllers.Utility
 
                 using (StreamWriter w = File.AppendText(DirectoryLogs + "\\" + NameRPA + "_" + timeLogs + "_" + Environment.UserName + ".log"))
                 {
+                    Models.GlobalVar.rootLogs = DirectoryLogs + "\\" + NameRPA + "_" + timeLogs + "_" + Environment.UserName + ".log";
                     Log(logMessage, w);
                     resultLogWr = "true";
                 }

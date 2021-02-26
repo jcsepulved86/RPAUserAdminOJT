@@ -88,6 +88,7 @@
     <Compile Include="Controllers\Utility\FillExcel.cs" />
     <Compile Include="Controllers\Utility\LogApplication.cs" />
     <Compile Include="Controllers\Utility\PasswordGenerator.cs" />
+    <Compile Include="Controllers\Utility\SendMail.cs" />
     <Compile Include="Controllers\Utility\TextFormatter.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

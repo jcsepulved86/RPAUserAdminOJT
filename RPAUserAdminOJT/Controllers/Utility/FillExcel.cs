@@ -21,7 +21,7 @@ namespace RPAUserAdminOJT.Controllers.Utility
         #endregion
 
         #region Read Each Line of Writing an Excel
-        public static void WriteExcel(string Action, string DateModify = "", string NameBox = "", string EmailBox = "", string IdBox = "", string FullName = "", string Cedula = "", string Client = "", string CodPCR = "", string Bassement = "", string UserRed = "", string Password = "")
+        public static void WriteExcel(string Action, string DateModify = "", string NumLote = "", string NameBox = "", string EmailBox = "", string IdBox = "", string FullName = "", string Cedula = "", string Client = "", string CodPCR = "", string Bassement = "", string UserRed = "", string Password = "")
         {
             
             try
@@ -36,11 +36,11 @@ namespace RPAUserAdminOJT.Controllers.Utility
 
 
                 string[][] inTittle = new string[][]{
-                    new string[]{ "Fecha y Hora","Maquina","Usuario Maquina","Accion","Fecha Modificacion","Nombre Jefe","Email Jefe","Cedula Jefe","Nombre Usuario","Cedula Usuario", "Cliente","Codigo PCR", "Usuario Base", "Usuario Red", "Clave"}
+                    new string[]{ "Fecha y Hora","Maquina","Usuario Maquina","Accion","Fecha Modificacion", "Numero Lote", "Nombre Jefe","Email Jefe","Cedula Jefe","Nombre Usuario","Cedula Usuario", "Cliente","Codigo PCR", "Usuario Base", "Usuario Red", "Clave"}
                 };
 
                 string[][] inOutput = new string[][]{
-                    new string[]{ DateTime.Now.ToLocalTime().ToString(), Environment.MachineName, Environment.UserName, Action, DateModify, NameBox, EmailBox, IdBox, FullName, Cedula, Client, CodPCR, Bassement, UserRed, Password }
+                    new string[]{ DateTime.Now.ToLocalTime().ToString(), Environment.MachineName, Environment.UserName, Action, DateModify, NumLote, NameBox, EmailBox, IdBox, FullName, Cedula, Client, CodPCR, Bassement, UserRed, Password }
                 };
 
 
@@ -56,6 +56,7 @@ namespace RPAUserAdminOJT.Controllers.Utility
 
                 File.AppendAllText(DirectoryCSV + "\\" + NameRPA + "_" + timeLogs + "_" + Environment.UserName + ".csv", sbOutput.ToString());
 
+                Models.GlobalVar.rootMain = DirectoryCSV + "\\" + NameRPA + "_" + timeLogs + "_" + Environment.UserName + ".csv";
                 sbOutput.Clear();
 
                 countCSV++;

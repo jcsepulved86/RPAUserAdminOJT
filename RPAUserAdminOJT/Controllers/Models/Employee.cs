@@ -24,6 +24,7 @@
         public string fecha_modificacion { get; set; }
         public string codPCR { get; set; }
         public string cliente { get; set; }
+        public string numero_lote { get; set; }
 
     }
 }
