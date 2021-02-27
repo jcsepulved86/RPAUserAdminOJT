@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Diagnostics;
 using System.DirectoryServices.AccountManagement;
 using System.Globalization;
 using System.IO;
@@ -32,9 +33,26 @@ namespace RPAUserAdminOJT.Controllers
         public static void Main(string[] args)
         {
 
-            string usred = Controllers.ActiveDirectory.Services.ServicesProvider.UserNetwork("1003908893");
-
-
+            int procCount = 0;
+            foreach (Process pp in Process.GetProcesses())
+            {
+                try
+                {
+                    if (String.Compare(pp.MainModule.FileName, Application.ExecutablePath, true) == 0)
+                    {
+                        procCount++;
+                        if (procCount > 1)
+                        {
+                            Application.Exit();
+                            return;
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Exception: " + ex.Message.ToString(), "RPA RobotCopy", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                }
+            }
 
             #region HIDDEN
             //Function.Delete.User("robotica.testa");
