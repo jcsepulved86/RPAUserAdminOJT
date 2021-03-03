@@ -25,7 +25,10 @@ namespace RPAUserAdminOJT.Controllers.Models
         public static DateTime TimeLogs = DateTime.Now;
         public static bool validTittle = true;
 
+        public static int countCSV = 0;
+
         public static string rootMain { get; set; }
+        public static string rootLote { get; set; }
         public static string rootLogs { get; set; }
 
 

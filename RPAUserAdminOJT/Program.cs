@@ -50,7 +50,7 @@ namespace RPAUserAdminOJT.Controllers
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("Exception: " + ex.Message.ToString(), "RPA RobotCopy", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    //MessageBox.Show("1Exception: " + ex.Message.ToString(), "RPA RobotCopy", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 }
             }
 
@@ -58,15 +58,26 @@ namespace RPAUserAdminOJT.Controllers
             //Function.Delete.User("robotica.testa");
             #endregion
 
-            LOGRobotica.Controllers.LogWebServices.logsWS(TiempoInicial, GUID, "Inicia proceso de Creacion de Usuario OJT", "Consulta Exitosa");
+            //LOGRobotica.Controllers.LogWebServices.logsWS(TiempoInicial, GUID, "Inicia proceso de Creacion de Usuario OJT", "Consulta Exitosa");
+            Utility.LogApplication.LogWrite("Main ==> " + "Inicia el proceso de automatizado para la creación de cuentas de usuario");
             //infintyWhile();
             Initialize();
-            LOGRobotica.Controllers.LogWebServices.logsWS(TiempoInicial, GUID, "Finaliza proceso de Creacion de Usuario OJT", "Consulta Exitosa", "Creados", Models.GlobalVar.countYESProcess.ToString(), "NoCreados", Models.GlobalVar.countNOProcess.ToString(), "", "Deshabilitado", Models.GlobalVar.CountDeshabilitadoYESProcess.ToString(), "NoDeshabilitado", Models.GlobalVar.CountDeshabilitadoNOProcess.ToString());
+            //LOGRobotica.Controllers.LogWebServices.logsWS(TiempoInicial, GUID, "Finaliza proceso de Creacion de Usuario OJT", "Consulta Exitosa", "Creados", Models.GlobalVar.countYESProcess.ToString(), "NoCreados", Models.GlobalVar.countNOProcess.ToString(), "", "Deshabilitado", Models.GlobalVar.CountDeshabilitadoYESProcess.ToString(), "NoDeshabilitado", Models.GlobalVar.CountDeshabilitadoNOProcess.ToString());
+            Utility.LogApplication.LogWrite("Main ==> " + "Finaliza el proceso de automatizado para la creación de cuentas de usuario");
+
+
+            //Utility.SendMail.Message("cpabona@grupokonecta.com");
+
+            //Utility.SendMail.SendingMessage("luisa.sanchez@grupokonecta.com", 3);
+
+            Utility.SendMail.SendingMessage("gestion_usuarios@grupokonecta.com", 3);
+
+            //Utility.SendMail.Message("gestion_usuarios@grupokonecta.com)");
 
         }
         #endregion
 
-        
+
         public static void infintyWhile()
         {
 
@@ -231,7 +242,7 @@ namespace RPAUserAdminOJT.Controllers
 
                         if (id_dp_estados == "309" || id_dp_estados == "310" || id_dp_estados == "311")
                         {
-                            Models.ModelExpedientes.candidatForma.Add(ceco + ";" + cod_pcrc + ";" + documento + ";" + id_dp_cargos + ";" + id_dp_estados + ";" + nombre_cargo + ";" + nombre_ceco + ";" + nombre_completo + ";" + nombre_pcrc + ";" + tipo_estado + ";" + documento_jefe + ";" + nombre_jefe + ";" + email_jefe + ";" + fecha_modificacion + ";" + numero_lote);
+                            Models.ModelExpedientes.candidatBeginner.Add(ceco + ";" + cod_pcrc + ";" + documento + ";" + id_dp_cargos + ";" + id_dp_estados + ";" + nombre_cargo + ";" + nombre_ceco + ";" + nombre_completo + ";" + nombre_pcrc + ";" + tipo_estado + ";" + documento_jefe + ";" + nombre_jefe + ";" + email_jefe + ";" + fecha_modificacion + ";" + numero_lote);
                         }
                         else if (id_dp_estados == "305" || id_dp_estados == "317" || id_dp_estados == "327")
                         {
@@ -239,29 +250,31 @@ namespace RPAUserAdminOJT.Controllers
                         }
                         //else if (id_dp_estados == "308")
                         //{
-                        //    Models.ModelExpedientes.candidatRechz.Add(ceco + ";" + cod_pcrc + ";" + documento + ";" + id_dp_cargos + ";" + id_dp_estados + ";" + nombre_cargo + ";" + nombre_ceco + ";" + nombre_completo + ";" + nombre_pcrc + ";" + tipo_estado + ";" + documento_jefe + ";" + nombre_jefe + ";" + email_jefe + ";" + fecha_modificacion + ";" + numero_lote);
+                        //    Models.ModelExpedientes.candidatServiceChange.Add(ceco + ";" + cod_pcrc + ";" + documento + ";" + id_dp_cargos + ";" + id_dp_estados + ";" + nombre_cargo + ";" + nombre_ceco + ";" + nombre_completo + ";" + nombre_pcrc + ";" + tipo_estado + ";" + documento_jefe + ";" + nombre_jefe + ";" + email_jefe + ";" + fecha_modificacion + ";" + numero_lote);
                         //}
                         else if (id_dp_estados == "300")
                         {
-                            Models.ModelExpedientes.candidatRechz.Add(ceco + ";" + cod_pcrc + ";" + documento + ";" + id_dp_cargos + ";" + id_dp_estados + ";" + nombre_cargo + ";" + nombre_ceco + ";" + nombre_completo + ";" + nombre_pcrc + ";" + tipo_estado + ";" + documento_jefe + ";" + nombre_jefe + ";" + email_jefe + ";" + fecha_modificacion + ";" + numero_lote);
+                            Models.ModelExpedientes.candidatDelete.Add(ceco + ";" + cod_pcrc + ";" + documento + ";" + id_dp_cargos + ";" + id_dp_estados + ";" + nombre_cargo + ";" + nombre_ceco + ";" + nombre_completo + ";" + nombre_pcrc + ";" + tipo_estado + ";" + documento_jefe + ";" + nombre_jefe + ";" + email_jefe + ";" + fecha_modificacion + ";" + numero_lote);
                         }
 
                     }
 
-                    Models.ModelExpedientes.candidatForma.ToString();
                     Models.ModelExpedientes.candidatBeginner.ToString();
                     Models.ModelExpedientes.candidatMovement.ToString();
-                    Models.ModelExpedientes.candidatRechz.ToString();
+                    //Models.ModelExpedientes.candidatServiceChange.ToString();
 
-                    //ValidateBeginner();
-                    //ValidateMovement();
-                    //ValidateRechzUsers();
+                    Models.ModelExpedientes.candidatDelete.ToString();
 
-                    //Utility.SendMail.Message("cpabona@grupokonecta.com");
 
-                    Utility.SendMail.Message("jcsepulveda@grupokonecta.com");
+                    ValidateBeginner();
+                    ValidateMovement();
+                    //ValidateServiceChange();
 
-                    //Utility.SendMail.Message("gestion_usuarios@grupokonecta.com)");
+                    Utility.SendMail.SendingMessage("gestion_usuarios@grupokonecta.com", 1);
+
+                    
+                    ValidateDeleting();
+                    Utility.SendMail.DataAnalytics();
 
                 }
                 else
@@ -280,42 +293,42 @@ namespace RPAUserAdminOJT.Controllers
             {
                 Models.Employee employee = new Models.Employee();
 
-                ArrayList formaList = new ArrayList();
-                string resultForma = string.Empty;
+                ArrayList beginnerList = new ArrayList();
+                string resultBeginner = string.Empty;
 
-                for (int i = 0; i < Models.ModelExpedientes.candidatForma.Count; i++)
+                for (int i = 0; i < Models.ModelExpedientes.candidatBeginner.Count; i++)
                 {
-                    string forma = Models.ModelExpedientes.candidatForma[i].ToString();
-                    string[] SPLTforma = forma.Split(';');
+                    string beginner = Models.ModelExpedientes.candidatBeginner[i].ToString();
+                    string[] SPLTbeginner = beginner.Split(';');
 
-                    int yillFiles = SPLTforma.Length;
+                    int yillFiles = SPLTbeginner.Length;
 
                     if (yillFiles == 15)
                     {
-                        for (int j = 0; j < SPLTforma.Count(); j++)
+                        for (int j = 0; j < SPLTbeginner.Count(); j++)
                         {
-                            resultForma = SPLTforma[j].ToString();
-                            formaList.Add(resultForma);
+                            resultBeginner = SPLTbeginner[j].ToString();
+                            beginnerList.Add(resultBeginner);
                         }
 
-                        formaList.ToString();
+                        beginnerList.ToString();
 
-                        string nombre = formaList[7].ToString();
+                        string nombre = beginnerList[7].ToString();
                         string usuarioRed = string.Empty;
                         string dictionaryArray = string.Empty;
                         string[] splBassment;
 
-                        if (formaList[1].ToString() != "0")
+                        if (beginnerList[1].ToString() != "0")
                         {
                             try
                             {
-                                dictionaryArray = DCTbassement[formaList[1].ToString()];
+                                dictionaryArray = DCTbassement[beginnerList[1].ToString()];
                                 splBassment = dictionaryArray.Split(';');
                             }
                             catch(Exception)
                             {
-                                Utility.LogApplication.LogWrite("ValidateBeginner ==> " + "El nombre: " + formaList[7].ToString() + ", no se encuentra codigo PCRC: " + formaList[1].ToString() + ", en la lista de usuarios base");
-                                formaList.Clear();
+                                Utility.LogApplication.LogWrite("ValidateBeginner ==> " + "El nombre: " + beginnerList[7].ToString() + ", no se encuentra codigo PCRC: " + beginnerList[1].ToString() + ", en la lista de usuarios base");
+                                beginnerList.Clear();
                                 continue;
                             }
                             
@@ -326,36 +339,40 @@ namespace RPAUserAdminOJT.Controllers
                             employee.MiddleName = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(secondNAME);
                             employee.FirstLastName = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(lastNAME);
                             employee.SecondLastName = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(secondlastNAME);
-                            employee.PostOfficeBox = formaList[2].ToString();
+                            employee.PostOfficeBox = beginnerList[2].ToString();
 
-                            if (formaList[1].ToString() == "0")
+                            if (beginnerList[1].ToString() == "0")
                             {
-                                employee.UserBasement = "pruebas.bot.1";
-                                Utility.LogApplication.LogWrite("Usuario Base ==> " + "El usuario: " + usuarioRed + ", no se encontro usuario base se mueve a Formacion");
+                                //employee.UserBasement = "pruebas.bot.1";
+                                Utility.LogApplication.LogWrite("Usuario Base ==> " + "El usuario: " + usuarioRed + ", no se encontro usuario base");
+
+                                continue;
+
+                                //CONTINUAR Y ALERTAR CUANDO NO TENGA USUARIO BASE
                             }
                             else
                             {
                                 employee.UserBasement = splBassment[0].ToString();
                             }
 
-                            employee.numero_lote = formaList[14].ToString();
+                            employee.numero_lote = beginnerList[14].ToString();
                             employee.HomePage = splBassment[4].ToString();
                             employee.City = splBassment[1].ToString();
                             employee.State = splBassment[2].ToString();
                             employee.Country = splBassment[3].ToString();
-                            employee.Description = formaList[6].ToString();
+                            employee.Description = beginnerList[6].ToString();
                             employee.Domain = splBassment[5].ToString();
                             employee.Department = splBassment[6].ToString();
                             employee.Company = "Konecta";
-                            employee.fecha_modificacion = formaList[13].ToString();
-                            employee.nombre_jefe = formaList[11].ToString();
-                            employee.email_jefe = formaList[12].ToString();
-                            employee.documento_jefe = formaList[10].ToString();
-                            employee.codPCR = formaList[1].ToString();
-                            employee.cliente = formaList[8].ToString();
+                            employee.fecha_modificacion = beginnerList[13].ToString();
+                            employee.nombre_jefe = beginnerList[11].ToString();
+                            employee.email_jefe = beginnerList[12].ToString();
+                            employee.documento_jefe = beginnerList[10].ToString();
+                            employee.codPCR = beginnerList[1].ToString();
+                            employee.cliente = beginnerList[8].ToString();
 
 
-                            string usred = Controllers.ActiveDirectory.Services.ServicesProvider.UserNetwork(formaList[2].ToString());
+                            string usred = Controllers.ActiveDirectory.Services.ServicesProvider.UserNetwork(beginnerList[2].ToString());
 
                             if (usred == "")
                             {
@@ -366,35 +383,43 @@ namespace RPAUserAdminOJT.Controllers
 
                                 if (Models.GlobalVar.existUser != false)
                                 {
-                                    if (employee.UserBasement != "pruebas.bot.1")
-                                    {
-                                        ActiveDirectory.Services.ServicesProvider.User_Add_Group(employee.SamAccountName, employee.UserBasement);
-                                    }
-                                    else
-                                    {
-                                        Utility.LogApplication.LogWrite("Sin Usuario Base ==> " + "El usuario: " + usuarioRed + ", imposible asignarle grupo");
-                                    }
+
+                                    ActiveDirectory.Services.ServicesProvider.User_Add_Group(employee.SamAccountName, employee.UserBasement);
+
+                                    //if (employee.UserBasement != "pruebas.bot.1")
+                                    //{
+                                    //    ActiveDirectory.Services.ServicesProvider.User_Add_Group(employee.SamAccountName, employee.UserBasement);
+                                    //}
+                                    //else
+                                    //{
+                                    //    Utility.LogApplication.LogWrite("Sin Usuario Base ==> " + "El usuario: " + usuarioRed + ", imposible asignarle grupo");
+                                    //}
 
                                     if (usuarioRed != "")
                                     {
                                         ActiveDirectory.Services.ServicesProvider.EnableAccount(usuarioRed);
                                     }
+
+
                                 }
                             }
                             else
                             {
                                 Utility.LogApplication.LogWrite("ValidateBeginner ==> " + "El nombre: " + usred + ", ya existe en la organizacion");
-                                Utility.FillExcel.WriteExcel("User No Create", employee.fecha_modificacion, employee.numero_lote, employee.nombre_jefe, employee.email_jefe, employee.documento_jefe, formaList[7].ToString(), formaList[2].ToString(), employee.cliente, employee.codPCR, employee.UserBasement );
+                                Utility.FillExcel.WriteExcel("User No Create", employee.fecha_modificacion, employee.numero_lote, employee.nombre_jefe, employee.email_jefe, employee.documento_jefe, beginnerList[7].ToString(), beginnerList[2].ToString(), employee.cliente, employee.codPCR, employee.UserBasement );
                             }
                         }
                         else
                         {
-                            Utility.LogApplication.LogWrite("ValidateBeginner ==> " + "El nombre: " + formaList[7].ToString() + ", no posee codigo PCRC");
+                            Utility.LogApplication.LogWrite("ValidateBeginner ==> " + "El nombre: " + beginnerList[7].ToString() + ", no posee codigo PCRC");
                         }
                     }
 
-                    formaList.Clear();
+                    beginnerList.Clear();
                 }
+
+                Utility.LogApplication.LogWrite("ValidateMovement ==> " + "Finaliza proceso de creación de cuentas de usuarios");
+
             }
             catch(Exception ex)
             {
@@ -408,42 +433,44 @@ namespace RPAUserAdminOJT.Controllers
         {
             try
             {
-                ArrayList RECHZList = new ArrayList();
-                string resultRECHZ = string.Empty;
+                ArrayList MovementList = new ArrayList();
+                string resultMovement = string.Empty;
 
-                for (int i = 0; i < Models.ModelExpedientes.candidatRechz.Count; i++)
+                for (int i = 0; i < Models.ModelExpedientes.candidatMovement.Count; i++)
                 {
-                    string rechz = Models.ModelExpedientes.candidatRechz[i].ToString();
-                    string[] SPLTRechz = rechz.Split(';');
+                    string movement = Models.ModelExpedientes.candidatMovement[i].ToString();
+                    string[] SPLTMovement = movement.Split(';');
 
-                    int yillFiles = SPLTRechz.Length;
+                    int yillFiles = SPLTMovement.Length;
 
                     if (yillFiles == 15)
                     {
-                        for (int j = 0; j < SPLTRechz.Count(); j++)
+                        for (int j = 0; j < SPLTMovement.Count(); j++)
                         {
-                            resultRECHZ = SPLTRechz[j].ToString();
-                            RECHZList.Add(resultRECHZ);
+                            resultMovement = SPLTMovement[j].ToString();
+                            MovementList.Add(resultMovement);
                         }
 
-                        RECHZList.ToString();
+                        MovementList.ToString();
 
-                        string usred = Controllers.ActiveDirectory.Services.ServicesProvider.UserNetwork(RECHZList[2].ToString());
+                        string usred = Controllers.ActiveDirectory.Services.ServicesProvider.UserNetwork(MovementList[2].ToString());
 
                         if (usred != "")
                         {
-                            string distinguishedname = Controllers.ActiveDirectory.Services.ServicesProvider.DistGuiName(RECHZList[2].ToString());
+                            string distinguishedname = Controllers.ActiveDirectory.Services.ServicesProvider.DistGuiName(MovementList[2].ToString());
                             ActiveDirectory.Services.ServicesProvider.DisableAccount(usred, distinguishedname);
                             //Models.GlobalVar.CountDeshabilitadoYESProcess++;
                         }
                         else
                         {
-                            Utility.LogApplication.LogWrite("ValidateMovement - Type: " + RECHZList[9].ToString() + " ==> " + "State: " + RECHZList[4].ToString() + ", FullName: " + RECHZList[7].ToString() + ", no posee codigo PCRC");
+                            Utility.LogApplication.LogWrite("ValidateMovement - Type: " + MovementList[9].ToString() + " ==> " + "State: " + MovementList[4].ToString() + ", FullName: " + MovementList[7].ToString() + ", no posee codigo PCRC");
                             //Models.GlobalVar.CountDeshabilitadoNOProcess++;
                         }
                     }
-                    RECHZList.Clear();
+                    MovementList.Clear();
                 }
+
+                Utility.LogApplication.LogWrite("ValidateMovement ==> " + "Finaliza proceso de movimiento de unidad organizacional para cuentas de usuarios");
             }
             catch (Exception ex)
             {
@@ -452,48 +479,51 @@ namespace RPAUserAdminOJT.Controllers
         }
         #endregion
 
-        #region VALIDATE USER FOR TYPE RETREAT
-        public static void ValidateRechzUsers()
+        #region VALIDATE DELETING USERS
+        public static void ValidateDeleting()
         {
             try
             {
-                ArrayList RECHZList = new ArrayList();
-                string resultRECHZ = string.Empty;
+                ArrayList deleteList = new ArrayList();
+                string resultDelete = string.Empty;
 
-                for (int i = 0; i < Models.ModelExpedientes.candidatRechz.Count; i++)
+                for (int i = 0; i < Models.ModelExpedientes.candidatDelete.Count; i++)
                 {
-                    string rechz = Models.ModelExpedientes.candidatRechz[i].ToString();
-                    string[] SPLTRechz = rechz.Split(';');
+                    string delete = Models.ModelExpedientes.candidatDelete[i].ToString();
+                    string[] SPLTDelete = delete.Split(';');
 
-                    int yillFiles = SPLTRechz.Length;
+                    int yillFiles = SPLTDelete.Length;
 
                     if (yillFiles == 15)
                     {
-                        for (int j = 0; j < SPLTRechz.Count(); j++)
+                        for (int j = 0; j < SPLTDelete.Count(); j++)
                         {
-                            resultRECHZ = SPLTRechz[j].ToString();
-                            RECHZList.Add(resultRECHZ);
+                            resultDelete = SPLTDelete[j].ToString();
+                            deleteList.Add(resultDelete);
                         }
 
-                        RECHZList.ToString();
+                        deleteList.ToString();
 
-                        string usred = Controllers.ActiveDirectory.Services.ServicesProvider.UserNetwork(RECHZList[2].ToString());
+                        string usred = Controllers.ActiveDirectory.Services.ServicesProvider.UserNetwork(deleteList[2].ToString());
 
-                        if (usred != "")
-                        {
-                            Function.Delete.User(usred);
-                        }
-                        else
-                        {
-                            Utility.LogApplication.LogWrite("ValidateRechzUsers - Type: " + RECHZList[9].ToString() + " ==> " + "State: " + RECHZList[4].ToString() + ", FullName: " + RECHZList[7].ToString() + ", no posee codigo PCRC");
-                        }
+                        //if (usred != "")
+                        //{
+                        //    Function.Delete.User(usred);
+                        //}
+                        //else
+                        //{
+                        //    Utility.LogApplication.LogWrite("ValidateDeleting - Type: " + deleteList[9].ToString() + " ==> " + "State: " + deleteList[4].ToString() + ", FullName: " + deleteList[7].ToString() + ", no posee codigo PCRC");
+                        //}
                     }
-                    RECHZList.Clear();
+                    deleteList.Clear();
                 }
+
+                Utility.LogApplication.LogWrite("ValidateDeleting ==> " + "Finaliza proceso de elimanción de cuentas de usuarios");
+
             }
             catch (Exception ex)
             {
-                Utility.LogApplication.LogWrite("ValidateRechzUsers ==> " + "Exception: " + ex.Message.ToString());
+                Utility.LogApplication.LogWrite("ValidateDeleting ==> " + "Exception: " + ex.Message.ToString());
             }
         }
         #endregion

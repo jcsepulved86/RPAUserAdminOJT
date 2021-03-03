@@ -25,12 +25,12 @@ namespace RPAUserAdminOJT.Controllers.Models
         public string fecha_modificacion { get; set; }
         public string id_dp_solicitudes { get; set; }
 
-
-        public static ArrayList candidatForma = new ArrayList();
-        public static ArrayList candidatOJT = new ArrayList();
-        public static ArrayList candidatRechz = new ArrayList();
+        
         public static ArrayList candidatBeginner = new ArrayList();
         public static ArrayList candidatMovement = new ArrayList();
+        public static ArrayList candidatDelete = new ArrayList();
+
+        public static ArrayList candidatServiceChange = new ArrayList();
 
     }
 }
