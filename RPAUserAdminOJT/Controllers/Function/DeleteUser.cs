@@ -68,6 +68,8 @@ namespace RPAUserAdminOJT.Controllers.Function
                 {
                     user.Delete();
                     Utility.LogApplication.LogWrite("Delete User ==> " + "Usuario: " + users + ", eliminado");
+                    Utility.FillExcel.WriteExcel("Delete Account", "", "", "", "", "", "", "", "", "", users, "se ha eliminado");
+
                     Models.GlobalVar.countYESProcess++;
                 }
                 else
