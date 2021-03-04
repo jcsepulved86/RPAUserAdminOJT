@@ -60,31 +60,61 @@ namespace RPAUserAdminOJT.Controllers
 
             LOGRobotica.Controllers.LogWebServices.logsWS(TiempoInicial, GUID, "Inicia proceso de Creacion de Usuario OJT", "Consulta Exitosa");
             Utility.LogApplication.LogWrite("Main ==> " + "Inicia el proceso de automatizado para la creación de cuentas de usuario");
+
             infintyWhile();
-            //Initialize();
+
             LOGRobotica.Controllers.LogWebServices.logsWS(TiempoInicial, GUID, "Finaliza proceso de Creacion de Usuario OJT", "Consulta Exitosa", "Creados", Models.GlobalVar.countYESProcess.ToString(), "NoCreados", Models.GlobalVar.countNOProcess.ToString(), "", "Deshabilitado", Models.GlobalVar.CountDeshabilitadoYESProcess.ToString(), "NoDeshabilitado", Models.GlobalVar.CountDeshabilitadoNOProcess.ToString());
             Utility.LogApplication.LogWrite("Main ==> " + "Finaliza el proceso de automatizado para la creación de cuentas de usuario");
 
             Utility.SendMail.SendingMessage("gestion_usuarios@grupokonecta.com", 3);
 
-
         }
         #endregion
 
-
+        #region INFINITY WHILE
         public static void infintyWhile()
         {
 
             while (true)
             {
+                
+                CultureInfo ci = CultureInfo.CreateSpecificCulture(CultureInfo.CurrentCulture.Name); ci.DateTimeFormat.ShortDatePattern = "dd-MM-yyyy";
+                Thread.CurrentThread.CurrentCulture = ci;
+
+                string hours = DateTime.Now.ToString("HH");
+
+                DateTime input = DateTime.ParseExact(hours, "HH", null);
+                DateTime date1 = DateTime.ParseExact("05", "HH", null);
+                DateTime date2 = DateTime.ParseExact("23", "HH", null);
+
+                bool snooze = IsBetween(input, date1, date2);
+
+                if (snooze != false)
+                {
+                    Initialize();
+                }
+
                 Thread.Sleep(3600000);
 
-                Initialize();
             }
 
         }
+        #endregion
 
-
+        #region COMPARE BETWEEN A RANGE HOURS
+        public static bool IsBetween(DateTime input, DateTime date1, DateTime date2)
+        {
+            try
+            {
+                return (input > date1 && input < date2);
+            }
+            catch (Exception ex)
+            {
+                LOGRobotica.Controllers.LogApplication.LogWrite("IsBetween" + " : " + "Error: " + ex.Message);
+                return false;
+            }
+        }
+        #endregion
 
         #region INITIALIZE
         public static void Initialize()
@@ -264,10 +294,16 @@ namespace RPAUserAdminOJT.Controllers
                     //ValidateServiceChange();
 
                     Utility.SendMail.SendingMessage("gestion_usuarios@grupokonecta.com", 1);
-
                     
+
                     ValidateDeleting();
                     Utility.SendMail.DataAnalytics();
+
+                    Models.ModelExpedientes.candidatBeginner.Clear();
+                    Models.ModelExpedientes.candidatMovement.Clear();
+                    //Models.ModelExpedientes.candidatServiceChange.Clear();
+
+                    Models.ModelExpedientes.candidatDelete.Clear();
 
                 }
                 else
