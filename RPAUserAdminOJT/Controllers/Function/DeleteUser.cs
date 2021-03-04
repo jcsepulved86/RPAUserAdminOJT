@@ -46,9 +46,9 @@ namespace RPAUserAdminOJT.Controllers.Function
 
             }
 
-            catch (Exception e)
+            catch (Exception ex)
             {
-                Console.WriteLine("Exception caught:\n\n" + e.ToString());
+                Utility.LogApplication.LogWrite("Cedula ==> " + "Exception: " + ex.Message.ToString());
                 return userRED;
             }
         }

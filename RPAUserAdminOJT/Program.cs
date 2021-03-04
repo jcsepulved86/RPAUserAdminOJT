@@ -48,7 +48,7 @@ namespace RPAUserAdminOJT.Controllers
                         }
                     }
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     //MessageBox.Show("1Exception: " + ex.Message.ToString(), "RPA RobotCopy", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 }
@@ -58,21 +58,15 @@ namespace RPAUserAdminOJT.Controllers
             //Function.Delete.User("robotica.testa");
             #endregion
 
-            //LOGRobotica.Controllers.LogWebServices.logsWS(TiempoInicial, GUID, "Inicia proceso de Creacion de Usuario OJT", "Consulta Exitosa");
+            LOGRobotica.Controllers.LogWebServices.logsWS(TiempoInicial, GUID, "Inicia proceso de Creacion de Usuario OJT", "Consulta Exitosa");
             Utility.LogApplication.LogWrite("Main ==> " + "Inicia el proceso de automatizado para la creación de cuentas de usuario");
-            //infintyWhile();
-            Initialize();
-            //LOGRobotica.Controllers.LogWebServices.logsWS(TiempoInicial, GUID, "Finaliza proceso de Creacion de Usuario OJT", "Consulta Exitosa", "Creados", Models.GlobalVar.countYESProcess.ToString(), "NoCreados", Models.GlobalVar.countNOProcess.ToString(), "", "Deshabilitado", Models.GlobalVar.CountDeshabilitadoYESProcess.ToString(), "NoDeshabilitado", Models.GlobalVar.CountDeshabilitadoNOProcess.ToString());
+            infintyWhile();
+            //Initialize();
+            LOGRobotica.Controllers.LogWebServices.logsWS(TiempoInicial, GUID, "Finaliza proceso de Creacion de Usuario OJT", "Consulta Exitosa", "Creados", Models.GlobalVar.countYESProcess.ToString(), "NoCreados", Models.GlobalVar.countNOProcess.ToString(), "", "Deshabilitado", Models.GlobalVar.CountDeshabilitadoYESProcess.ToString(), "NoDeshabilitado", Models.GlobalVar.CountDeshabilitadoNOProcess.ToString());
             Utility.LogApplication.LogWrite("Main ==> " + "Finaliza el proceso de automatizado para la creación de cuentas de usuario");
-
-
-            //Utility.SendMail.Message("cpabona@grupokonecta.com");
-
-            //Utility.SendMail.SendingMessage("luisa.sanchez@grupokonecta.com", 3);
 
             Utility.SendMail.SendingMessage("gestion_usuarios@grupokonecta.com", 3);
 
-            //Utility.SendMail.Message("gestion_usuarios@grupokonecta.com)");
 
         }
         #endregion
@@ -265,7 +259,6 @@ namespace RPAUserAdminOJT.Controllers
 
                     Models.ModelExpedientes.candidatDelete.ToString();
 
-
                     ValidateBeginner();
                     ValidateMovement();
                     //ValidateServiceChange();
@@ -348,7 +341,6 @@ namespace RPAUserAdminOJT.Controllers
 
                                 continue;
 
-                                //CONTINUAR Y ALERTAR CUANDO NO TENGA USUARIO BASE
                             }
                             else
                             {
@@ -506,14 +498,14 @@ namespace RPAUserAdminOJT.Controllers
 
                         string usred = Controllers.ActiveDirectory.Services.ServicesProvider.UserNetwork(deleteList[2].ToString());
 
-                        //if (usred != "")
-                        //{
-                        //    Function.Delete.User(usred);
-                        //}
-                        //else
-                        //{
-                        //    Utility.LogApplication.LogWrite("ValidateDeleting - Type: " + deleteList[9].ToString() + " ==> " + "State: " + deleteList[4].ToString() + ", FullName: " + deleteList[7].ToString() + ", no posee codigo PCRC");
-                        //}
+                        if (usred != "")
+                        {
+                            Function.Delete.User(usred);
+                        }
+                        else
+                        {
+                            Utility.LogApplication.LogWrite("ValidateDeleting - Type: " + deleteList[9].ToString() + " ==> " + "State: " + deleteList[4].ToString() + ", FullName: " + deleteList[7].ToString() + ", no posee codigo PCRC");
+                        }
                     }
                     deleteList.Clear();
                 }

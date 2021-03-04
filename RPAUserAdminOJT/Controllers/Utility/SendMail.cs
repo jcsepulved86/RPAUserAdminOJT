@@ -153,7 +153,7 @@ namespace RPAUserAdminOJT.Controllers.Utility
 
         public static void DataAnalytics()
         {
-            Models.GlobalVar.filePath = @"C:\AllGithub\RPAUserAdminOJT\RPAUserAdminOJT\bin\Debug\OJTMainProcess\RPAUserAdminOJT_01022021_838_jonathan.arias.o.csv";
+            Models.GlobalVar.filePath = Models.GlobalVar.rootMain;
 
             string result = string.Empty;
             string[] filelines = File.ReadAllLines(Models.GlobalVar.filePath);

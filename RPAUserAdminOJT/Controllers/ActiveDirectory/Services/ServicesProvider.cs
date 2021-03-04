@@ -79,8 +79,8 @@ namespace RPAUserAdminOJT.Controllers.ActiveDirectory.Services
             }
             catch (Exception ex)
             {
+                Utility.LogApplication.LogWrite("ServicesProvider Create ==> " + "Exception: " + ex.Message.ToString());
                 return result = false;
-                throw ex;
             }
         }
 
@@ -177,8 +177,9 @@ namespace RPAUserAdminOJT.Controllers.ActiveDirectory.Services
                     Models.GlobalVar.accessEntires = false;
                 }
 
+                Utility.LogApplication.LogWrite("Create Services Provider ==> " + "Exception: " + e.Message.ToString());
+
                 return result = false;
-                throw e;
 
             }
         }
@@ -263,7 +264,7 @@ namespace RPAUserAdminOJT.Controllers.ActiveDirectory.Services
             }
             catch (Exception ex)
             {
-                throw ex;
+                Utility.LogApplication.LogWrite("AddUserToGroup ==> " + "Exception: " + ex.Message.ToString());
             }
 
         }
@@ -398,9 +399,9 @@ namespace RPAUserAdminOJT.Controllers.ActiveDirectory.Services
 
             }
 
-            catch (Exception e)
+            catch (Exception ex)
             {
-                Console.WriteLine("Exception caught:\n\n" + e.ToString());
+                Utility.LogApplication.LogWrite("DistGuiName ==> " + "Exception: " + ex.Message.ToString());
                 return distinguishedname;
             }
         }
@@ -438,9 +439,9 @@ namespace RPAUserAdminOJT.Controllers.ActiveDirectory.Services
 
             }
 
-            catch (Exception e)
+            catch (Exception ex)
             {
-                Console.WriteLine("Exception caught:\n\n" + e.ToString());
+                Utility.LogApplication.LogWrite("UserNetwork ==> " + "Exception: " + ex.Message.ToString());
                 return userRED;
             }
         }

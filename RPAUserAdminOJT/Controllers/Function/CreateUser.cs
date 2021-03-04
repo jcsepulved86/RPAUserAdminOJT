@@ -77,6 +77,8 @@ namespace RPAUserAdminOJT.Controllers.Function
             }
             catch (Exception ex)
             {
+                Utility.LogApplication.LogWrite("User ==> " + "Exception: " + ex.Message.ToString());
+
                 result = ex.Message;
                 principalContext.Dispose();
             }
