@@ -32,6 +32,7 @@ namespace RPAUserAdminOJT.Controllers.Utility
                 CultureInfo ci = CultureInfo.CreateSpecificCulture(CultureInfo.CurrentCulture.Name); ci.DateTimeFormat.ShortDatePattern = "ddMMyyyy";
                 Thread.CurrentThread.CurrentCulture = ci;
 
+                Models.GlobalVar.TimeLogs = DateTime.Now;
                 string timeLogs = Models.GlobalVar.TimeLogs.ToString("ddMMyyyy_Hmm");
 
                 CreateDirectory();
@@ -133,7 +134,6 @@ namespace RPAUserAdminOJT.Controllers.Utility
                     Models.GlobalVar.countCSV++;
 
                 }
-
 
             }
             catch (Exception ex)

@@ -63,11 +63,6 @@ namespace RPAUserAdminOJT.Controllers
 
             infintyWhile();
 
-            LOGRobotica.Controllers.LogWebServices.logsWS(TiempoInicial, GUID, "Finaliza proceso de Creacion de Usuario OJT", "Consulta Exitosa", "Creados", Models.GlobalVar.countYESProcess.ToString(), "NoCreados", Models.GlobalVar.countNOProcess.ToString(), "", "Deshabilitado", Models.GlobalVar.CountDeshabilitadoYESProcess.ToString(), "NoDeshabilitado", Models.GlobalVar.CountDeshabilitadoNOProcess.ToString());
-            Utility.LogApplication.LogWrite("Main ==> " + "Finaliza el proceso de automatizado para la creación de cuentas de usuario");
-
-            Utility.SendMail.SendingMessage("gestion_usuarios@grupokonecta.com", 3);
-
         }
         #endregion
 
@@ -92,9 +87,16 @@ namespace RPAUserAdminOJT.Controllers
                 if (snooze != false)
                 {
                     Initialize();
+
+                    LOGRobotica.Controllers.LogWebServices.logsWS(TiempoInicial, GUID, "Finaliza proceso de Creacion de Usuario OJT", "Consulta Exitosa", "Creados", Models.GlobalVar.countYESProcess.ToString(), "NoCreados", Models.GlobalVar.countNOProcess.ToString(), "", "Deshabilitado", Models.GlobalVar.CountDeshabilitadoYESProcess.ToString(), "NoDeshabilitado", Models.GlobalVar.CountDeshabilitadoNOProcess.ToString());
+                    Utility.LogApplication.LogWrite("Main ==> " + "Finaliza el proceso de automatizado para la creación de cuentas de usuario");
+
+                    Utility.SendMail.SendingMessage("gestion_usuarios@grupokonecta.com", 3);
+                    //Utility.SendMail.SendingMessage("jcsepulveda@grupokonecta.com", 3);
                 }
 
                 Thread.Sleep(3600000);
+                //Thread.Sleep(60000);
 
             }
 
@@ -272,10 +274,6 @@ namespace RPAUserAdminOJT.Controllers
                         {
                             Models.ModelExpedientes.candidatMovement.Add(ceco + ";" + cod_pcrc + ";" + documento + ";" + id_dp_cargos + ";" + id_dp_estados + ";" + nombre_cargo + ";" + nombre_ceco + ";" + nombre_completo + ";" + nombre_pcrc + ";" + tipo_estado + ";" + documento_jefe + ";" + nombre_jefe + ";" + email_jefe + ";" + fecha_modificacion + ";" + numero_lote);
                         }
-                        //else if (id_dp_estados == "308")
-                        //{
-                        //    Models.ModelExpedientes.candidatServiceChange.Add(ceco + ";" + cod_pcrc + ";" + documento + ";" + id_dp_cargos + ";" + id_dp_estados + ";" + nombre_cargo + ";" + nombre_ceco + ";" + nombre_completo + ";" + nombre_pcrc + ";" + tipo_estado + ";" + documento_jefe + ";" + nombre_jefe + ";" + email_jefe + ";" + fecha_modificacion + ";" + numero_lote);
-                        //}
                         else if (id_dp_estados == "300")
                         {
                             Models.ModelExpedientes.candidatDelete.Add(ceco + ";" + cod_pcrc + ";" + documento + ";" + id_dp_cargos + ";" + id_dp_estados + ";" + nombre_cargo + ";" + nombre_ceco + ";" + nombre_completo + ";" + nombre_pcrc + ";" + tipo_estado + ";" + documento_jefe + ";" + nombre_jefe + ";" + email_jefe + ";" + fecha_modificacion + ";" + numero_lote);
@@ -285,24 +283,21 @@ namespace RPAUserAdminOJT.Controllers
 
                     Models.ModelExpedientes.candidatBeginner.ToString();
                     Models.ModelExpedientes.candidatMovement.ToString();
-                    //Models.ModelExpedientes.candidatServiceChange.ToString();
-
                     Models.ModelExpedientes.candidatDelete.ToString();
 
-                    ValidateBeginner();
-                    ValidateMovement();
-                    //ValidateServiceChange();
+                    if (Models.ModelExpedientes.candidatBeginner.Count != 0 || Models.ModelExpedientes.candidatMovement.Count != 0 || Models.ModelExpedientes.candidatDelete.Count != 0)
+                    {
+                        ValidateBeginner();
+                        ValidateMovement();
+                        ValidateDeleting();
 
-                    Utility.SendMail.SendingMessage("gestion_usuarios@grupokonecta.com", 1);
-                    
-
-                    ValidateDeleting();
-                    Utility.SendMail.DataAnalytics();
+                        Utility.SendMail.SendingMessage("gestion_usuarios@grupokonecta.com", 1);
+                        //Utility.SendMail.SendingMessage("jcsepulveda@grupokonecta.com", 1);
+                        Utility.SendMail.DataAnalytics();
+                    }
 
                     Models.ModelExpedientes.candidatBeginner.Clear();
                     Models.ModelExpedientes.candidatMovement.Clear();
-                    //Models.ModelExpedientes.candidatServiceChange.Clear();
-
                     Models.ModelExpedientes.candidatDelete.Clear();
 
                 }
@@ -446,12 +441,12 @@ namespace RPAUserAdminOJT.Controllers
                     beginnerList.Clear();
                 }
 
-                Utility.LogApplication.LogWrite("ValidateMovement ==> " + "Finaliza proceso de creación de cuentas de usuarios");
+                Utility.LogApplication.LogWrite("ValidateBeginner ==> " + "Finaliza proceso de creación de cuentas de usuarios");
 
             }
             catch(Exception ex)
             {
-                Utility.LogApplication.LogWrite("ValidateFormaUsers ==> " + "Exception: " + ex.Message.ToString());
+                Utility.LogApplication.LogWrite("ValidateBeginner ==> " + "Exception: " + ex.Message.ToString());
             }
         }
         #endregion

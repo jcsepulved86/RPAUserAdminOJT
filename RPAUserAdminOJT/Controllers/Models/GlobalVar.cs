@@ -22,7 +22,7 @@ namespace RPAUserAdminOJT.Controllers.Models
         public static string RedUser = string.Empty;
         public static bool outLoadFile = false;
         public static bool existUser = false;
-        public static DateTime TimeLogs = DateTime.Now;
+        public static DateTime TimeLogs = DateTime.MinValue;
         public static bool validTittle = true;
 
         public static int countCSV = 0;

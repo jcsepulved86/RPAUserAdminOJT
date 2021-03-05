@@ -226,6 +226,7 @@ namespace RPAUserAdminOJT.Controllers.Utility
                 Models.GlobalVar.countCSV = 0;
 
                 SendingMessage("gestion_usuarios@grupokonecta.com", 2);
+                //SendingMessage("jcsepulveda@grupokonecta.com", 2);
             }
 
         }
