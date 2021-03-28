@@ -72,7 +72,8 @@ namespace RPAUserAdminOJT.Controllers
 
             while (true)
             {
-                
+                Models.GlobalVar.TimeLogs = DateTime.Now;
+
                 CultureInfo ci = CultureInfo.CreateSpecificCulture(CultureInfo.CurrentCulture.Name); ci.DateTimeFormat.ShortDatePattern = "dd-MM-yyyy";
                 Thread.CurrentThread.CurrentCulture = ci;
 
@@ -285,12 +286,24 @@ namespace RPAUserAdminOJT.Controllers
                     Models.ModelExpedientes.candidatMovement.ToString();
                     Models.ModelExpedientes.candidatDelete.ToString();
 
-                    if (Models.ModelExpedientes.candidatBeginner.Count != 0 || Models.ModelExpedientes.candidatMovement.Count != 0 || Models.ModelExpedientes.candidatDelete.Count != 0)
+                    if (Models.ModelExpedientes.candidatBeginner.Count != 0)
                     {
                         ValidateBeginner();
-                        ValidateMovement();
-                        ValidateDeleting();
+                    }
 
+                    if (Models.ModelExpedientes.candidatMovement.Count != 0)
+                    {
+                        ValidateMovement();
+                    }
+
+                    if (Models.ModelExpedientes.candidatDelete.Count != 0)
+                    {
+                        ValidateDeleting();
+                    }
+
+
+                    if (Models.ModelExpedientes.candidatBeginner.Count != 0 || Models.ModelExpedientes.candidatMovement.Count != 0 || Models.ModelExpedientes.candidatDelete.Count != 0)
+                    {
                         Utility.SendMail.SendingMessage("gestion_usuarios@grupokonecta.com", 1);
                         //Utility.SendMail.SendingMessage("jcsepulveda@grupokonecta.com", 1);
                         Utility.SendMail.DataAnalytics();
@@ -507,6 +520,7 @@ namespace RPAUserAdminOJT.Controllers
         {
             try
             {
+
                 ArrayList deleteList = new ArrayList();
                 string resultDelete = string.Empty;
 
@@ -535,7 +549,7 @@ namespace RPAUserAdminOJT.Controllers
                         }
                         else
                         {
-                            Utility.LogApplication.LogWrite("ValidateDeleting - Type: " + deleteList[9].ToString() + " ==> " + "State: " + deleteList[4].ToString() + ", FullName: " + deleteList[7].ToString() + ", no posee codigo PCRC");
+                            Utility.LogApplication.LogWrite("ValidateDeleting ==> " + "No se encontro el usuario de red debido a que no existe en la organización");
                         }
                     }
                     deleteList.Clear();

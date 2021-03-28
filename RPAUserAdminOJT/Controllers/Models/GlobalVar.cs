@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Configuration;
 
 namespace RPAUserAdminOJT.Controllers.Models
 {
@@ -6,8 +7,8 @@ namespace RPAUserAdminOJT.Controllers.Models
     {
         public static string Domain = "multienlace.com.co";
         public static string Move = "Retiros";
-        public static string UserAdm = "user.gestusuarios";
-        public static string Passwrd = "6r](71w67vy9*";
+        public static string UserAdm = ConfigurationManager.AppSettings["BOTUser"];
+        public static string Passwrd = ConfigurationManager.AppSettings["BOTPassword"];
         public static string passwordUser = string.Empty;
         public static bool addUserGroup;
         public static bool NeverPswd;
@@ -22,7 +23,7 @@ namespace RPAUserAdminOJT.Controllers.Models
         public static string RedUser = string.Empty;
         public static bool outLoadFile = false;
         public static bool existUser = false;
-        public static DateTime TimeLogs = DateTime.MinValue;
+        public static DateTime TimeLogs;
         public static bool validTittle = true;
 
         public static int countCSV = 0;
